@@ -22,6 +22,7 @@ public class Main {
     static int whitecardpoolsize;
     static int blackcardpoolsize;
     static int numberofturn = 1;
+    ArrayList<Guess> history = new ArrayList<>();
 
     public static void main(String [] args) {
         cardpool = newcardpool();
@@ -329,6 +330,65 @@ public class Main {
     }
 
     public static boolean guess(Player player) {
+        System.out.println("Now please make a guess on other player's card");
+        Player guessingplayer = guessplayer(player);
+        while (guessingplayer == null) {
+            guessingplayer = guessplayer(player);
+        }
+        String position = guessposition(player);
+        while (position == null) {
+            position = guessposition(player);
+        }
+        int color = guesscolor();
+        int number = guessnumber();
+        while (number < 0 || number > 11) {
+            number = guessnumber();
+        }
+        return true;
+    }
+
+    public static Player guessplayer(Player player) {
+        return null;
+    }
+
+    public static String guessposition(Player player) {
+        return null;
+    }
+
+    public static int guesscolor() {
+        return 0;
+    }
+
+    public static int guessnumber() {
+        return 0;
+    }
+
+    public static boolean testforguess(Card card, int number, int color) {
+        boolean colorboolean = false;
+        if (color <= 0) {
+            colorboolean = true;
+        }
+        if (card.number == number) {
+            if (card.colorwithwhitetrueblackfalse == colorboolean) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean testifwin(Player player) {
+        boolean[] test = {true, true, true, true};
+        for (int i = 0; i < numberOfPlayer; i++) {
+            if (player.equals(playerarray[i])) {
+                continue;
+            } else {
+                for (int j = 0; j < playerarray[i].hand.size(); j++) {
+                    if (playerarray[i].hand.get(j).visible != test) {
+                        return false;
+                    }
+                }
+            }
+        }
         return true;
     }
 
