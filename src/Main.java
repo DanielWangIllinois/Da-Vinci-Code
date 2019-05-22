@@ -286,6 +286,7 @@ public class Main {
         Card currentcard = pickcardinturn(player);
         showboard(player);
         showhand(player);
+        guess(player);
         numberofturn++;
         return true;
     }
@@ -324,6 +325,10 @@ public class Main {
                 System.out.print("\n");
             }
         }
+        return true;
+    }
+
+    public static boolean guess(Player player) {
         return true;
     }
 
