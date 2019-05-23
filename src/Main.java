@@ -306,7 +306,19 @@ public class Main {
         Card currentcard = pickcardinturn(player);
         showboard(player);
         showhand(player);
+        showhandfromotherplayer(player);
+        if (currentcard != null) {
+            String color = "B";
+            if (currentcard.colorwithwhitetrueblackfalse == true) {
+                color = "W";
+            }
+            System.out.print("\n");
+            System.out.print("Your current card is " + color + currentcard.number);
+            System.out.println("Note that if you make an incorrect guess, this card will be shown to everyone");
+            System.out.print("\n");
+        }
         guess(player);
+        System.out.println("This is the end of #" + numberofturn + " turn");
         numberofturn++;
         return true;
     }
@@ -390,6 +402,7 @@ public class Main {
             showhand(player);
             if (testifwin(player) == true) {
                 changewinner(player);
+                System.out.println("\n");
                 System.out.println("This game is ended.");
                 System.out.println("The winner is  " + player.name + "  !");
                 System.out.println("Thank you for playing!");
@@ -498,6 +511,11 @@ public class Main {
 
     public static boolean rightguess(Card card) {
         //change the card so that it's visiable to every one
+        return true;
+    }
+
+    public static boolean showhandfromotherplayer(Player player) {
+        //show your hand in other player's view
         return true;
     }
 
