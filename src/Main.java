@@ -22,7 +22,7 @@ public class Main {
     static int whitecardpoolsize;
     static int blackcardpoolsize;
     static int numberofturn = 1;
-    ArrayList<Guess> history = new ArrayList<>();
+    static ArrayList<Guess> history = new ArrayList<>();
 
     public static void main(String [] args) {
         cardpool = newcardpool();
@@ -233,6 +233,12 @@ public class Main {
         }
     }
 
+    public static void createpositionbeforepick(Player player, Card card) {
+        String[] stringarray = {"N", "M", "P", "Q"};
+        String[] numberarray = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
+        card.position = stringarray[findplayerindex(player)] + numberarray[player.hand.size()];
+    }
+
     public static boolean puttohand(Player player, Card card) {
         player.hand.add(card);
         Collections.sort(player.hand, new Comparator<Card>(){
@@ -318,7 +324,7 @@ public class Main {
     }
 
     public static boolean showboard(Player player) {
-        System.out.println("\n");
+        System.out.print("\n");
         for (int i = 0; i < numberOfPlayer; i++) {
             if (playerarray[i].equals(player)) {
                 continue;
@@ -353,18 +359,50 @@ public class Main {
 
     public static boolean guess(Player player) {
         System.out.println("Now please make a guess on other player's card");
-        Player guessingplayer = guessplayer(player);
-        while (guessingplayer == null) {
-            guessingplayer = guessplayer(player);
+        Player playerguessed = guessplayer(player);
+        while (playerguessed == null) {
+            playerguessed = guessplayer(player);
         }
-        String position = guessposition(guessingplayer);
+        String position = guessposition(playerguessed);
         while (position == null) {
-            position = guessposition(guessingplayer);
+            position = guessposition(playerguessed);
         }
         int color = guesscolor();
+        boolean colorboolean = false;
+        if (color <= 0) {
+            colorboolean = true;
+        }
         int number = guessnumber();
         while (number == -1) {
             number = guessnumber();
+        }
+        Card guessingcard = findcardbyposition(position);
+        boolean guessboolean = testforguess(guessingcard, number, color);
+        Guess currentguess =  new Guess(player, playerguessed,
+                guessingcard, colorboolean, number, position, guessboolean);
+        currentguess.createguessoutput(numberofturn);
+        history.add(currentguess);
+        if (guessboolean == true) {
+            rightguess(guessingcard);
+            System.out.println("Congratulations, this is a correct guess!");
+            System.out.println("The new board is:");
+            showboard(player);
+            showhand(player);
+            if (testifwin(player) == true) {
+                changewinner(player);
+                System.out.println("This game is ended.");
+                System.out.println("The winner is  " + player.name + "  !");
+                System.out.println("Thank you for playing!");
+            } else {
+                System.out.println("Do you want to keep guessing or to end this ture?");
+                System.out.println("0 for keep guessing and 1 for end turn");
+                int decision = scan.nextInt();
+                if (decision <= 0) {
+                    return guess(player);
+                }
+            }
+        } else {
+            System.out.println("Sorry, you didn't guessed correctly");
         }
         return true;
     }
@@ -448,10 +486,30 @@ public class Main {
         return true;
     }
 
-    public static void createpositionbeforepick(Player player, Card card) {
-        String[] stringarray = {"N", "M", "P", "Q"};
-        String[] numberarray = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
-        card.position = stringarray[findplayerindex(player)] + numberarray[player.hand.size()];
+    public static boolean testiflose(Player player) {
+        //test if a player is lost so that no more move are carried out by that player
+        return true;
+    }
+
+    public static void printhistory() {
+        //print the history of all guesses
+        return;
+    }
+
+    public static boolean rightguess(Card card) {
+        //change the card so that it's visiable to every one
+        return true;
+    }
+
+    public static Card findcardbyposition(String position) {
+        for (int i = 0; i < numberOfPlayer; i++) {
+            for (int j = 0; j < playerarray[i].hand.size(); j++) {
+                if (playerarray[i].hand.get(j).position.equals(position)) {
+                    return playerarray[i].hand.get(j);
+                }
+            }
+        }
+        return null;
     }
 
     public static boolean pickwhite() {
@@ -468,7 +526,7 @@ public class Main {
         return true;
     }
 
-    public void Changewinner (Player player) {
+    public static void changewinner (Player player) {
         player.win = true;
         ended = true;
     }
