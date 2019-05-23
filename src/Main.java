@@ -120,11 +120,6 @@ public class Main {
         inputarray[j] = tmpcard;
     }
 
-    public void Changewinner (Player player) {
-        player.win = true;
-        ended = true;
-    }
-
     public static boolean start() {
         System.out.println("Welcome to The Da Vinci Code" + "\n");
         System.out.println("How many people is playing this game?");
@@ -166,7 +161,9 @@ public class Main {
             for (int j = 1; j <= 4; j++) {
                 System.out.println("What color do you want for your #" + j + " card?");
                 int color = getavailablecolor();
-                pickcardtoplayer(playerarray[i], color);
+                if (color != -1) {
+                    pickcardtoplayer(playerarray[i], color);
+                }
             }
             showhand(playerarray[i]);
         }
@@ -197,6 +194,12 @@ public class Main {
             } else {
                 System.out.println("0 for white and 1 for black");
                 int color = scan.nextInt();
+                if (color > 1) {
+                    color = 1;
+                }
+                if (color < 0) {
+                    color = 0;
+                }
                 return color;
             }
         }
@@ -206,6 +209,7 @@ public class Main {
         if (color <= 0) {
             Card toreturn = cardpool[0][12 - whitecardpoolsize];
             toreturn.picked = true;
+            createpositionbeforepick(player, toreturn);
             puttohand(player, toreturn);
             cardpoolsize--;
             whitecardpoolsize--;
@@ -217,6 +221,7 @@ public class Main {
         } else {
             Card toreturn = cardpool[1][12 - blackcardpoolsize];
             toreturn.picked = true;
+            createpositionbeforepick(player, toreturn);
             puttohand(player, toreturn);
             cardpoolsize--;
             blackcardpoolsize--;
@@ -249,7 +254,7 @@ public class Main {
     }
 
     public static boolean showhand(Player player) {
-        System.out.println("Your cards are:");
+        System.out.println("Your cards are (with position string under them):");
         for (int i = 0; i < player.hand.size(); i++) {
             if (player.hand.get(i).colorwithwhitetrueblackfalse == true) {
                 System.out.print("W");
@@ -257,6 +262,14 @@ public class Main {
                 System.out.print("B");
             }
             System.out.print(player.hand.get(i).number + " ");
+        }
+        System.out.print("\n");
+        for (int k = 0; k < player.hand.size(); k++) {
+            if (player.hand.get(k).number >= 10) {
+                System.out.print(player.hand.get(k).position + "  ");
+            } else {
+                System.out.print(player.hand.get(k).position + " ");
+            }
         }
         System.out.println("\n");
         return true;
@@ -296,7 +309,7 @@ public class Main {
         System.out.println("\n");
         System.out.println("Welcome  " + playerarray[findplayerindex(player)].name + "  to pick a card");
         int color = getavailablecolor();
-        if (color >= 0) {
+        if (color != -1) {
             Card cardpicked = pickcardtoplayer(player, color);
             return cardpicked;
         } else {
@@ -310,7 +323,7 @@ public class Main {
             if (playerarray[i].equals(player)) {
                 continue;
             } else {
-                System.out.println(playerarray[i].name + "'s card:");
+                System.out.println(playerarray[i].name + "'s card (with position string under them):");
                 for (int j = 0; j < playerarray[i].hand.size(); j++) {
                     if (playerarray[i].hand.get(j).colorwithwhitetrueblackfalse == true) {
                         System.out.print("W");
@@ -321,6 +334,15 @@ public class Main {
                         System.out.print(playerarray[i].hand.get(j).number + " ");
                     } else {
                         System.out.print("x ");
+                    }
+                }
+                System.out.print("\n");
+                for (int k = 0; k < playerarray[i].hand.size(); k++) {
+                    if (playerarray[i].hand.get(k).number >= 10
+                            && playerarray[i].hand.get(k).visible[findplayerindex(player)] == true) {
+                        System.out.print(playerarray[i].hand.get(k).position + "  ");
+                    } else {
+                        System.out.print(playerarray[i].hand.get(k).position + " ");
                     }
                 }
                 System.out.print("\n");
@@ -335,32 +357,66 @@ public class Main {
         while (guessingplayer == null) {
             guessingplayer = guessplayer(player);
         }
-        String position = guessposition(player);
+        String position = guessposition(guessingplayer);
         while (position == null) {
-            position = guessposition(player);
+            position = guessposition(guessingplayer);
         }
         int color = guesscolor();
         int number = guessnumber();
-        while (number < 0 || number > 11) {
+        while (number == -1) {
             number = guessnumber();
         }
         return true;
     }
 
     public static Player guessplayer(Player player) {
+        System.out.println("The name of the player you want to guess is:");
+        String name = scan.next();
+        for (int i = 0; i < numberOfPlayer; i++) {
+            if (playerarray[i].equals(player)) {
+                continue;
+            }
+            if (name.equals(playerarray[i].name)) {
+                return playerarray[i];
+            }
+        }
+        System.out.println("The name you entered did not match any of other player's name, please try again");
         return null;
     }
 
-    public static String guessposition(Player player) {
+    public static String guessposition(Player guessingplayer) {
+        System.out.println("The position you want to guess is:");
+        String position = scan.next();
+        for (int i = 0; i < guessingplayer.hand.size(); i++) {
+            if (position.equals(guessingplayer.hand.get(i).position)) {
+                return position;
+            }
+        }
+        System.out.println("The position you entered did not match any of the position, please try again");
         return null;
     }
 
     public static int guesscolor() {
-        return 0;
+        System.out.println("The color you want to guess is:");
+        System.out.println("0 for white and 1 for black");
+        int color = scan.nextInt();
+        if (color < 0) {
+            color = 0;
+        }
+        if (color > 1) {
+            color = 1;
+        }
+        return color;
     }
 
     public static int guessnumber() {
-        return 0;
+        System.out.println("The number you want to guess is:");
+        int number = scan.nextInt();
+        if (number >= 0 && number <= 11) {
+            return number;
+        }
+        System.out.println("The number you entered is not in the range of [0, 11], please try again");
+        return -1;
     }
 
     public static boolean testforguess(Card card, int number, int color) {
@@ -392,6 +448,12 @@ public class Main {
         return true;
     }
 
+    public static void createpositionbeforepick(Player player, Card card) {
+        String[] stringarray = {"N", "M", "P", "Q"};
+        String[] numberarray = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
+        card.position = stringarray[findplayerindex(player)] + numberarray[player.hand.size()];
+    }
+
     public static boolean pickwhite() {
         if (countwhitepoolsize() <= 0) {
             return false;
@@ -404,5 +466,10 @@ public class Main {
             return false;
         }
         return true;
+    }
+
+    public void Changewinner (Player player) {
+        player.win = true;
+        ended = true;
     }
 }
