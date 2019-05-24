@@ -1,7 +1,5 @@
 import java.util.Scanner;
-import java.util.Arrays;
 import java.util.Random;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,10 +10,10 @@ public class Main {
     static int numberOfPlayer;
     static boolean started = false;
     static boolean ended = false;
-    static Player playerone = new Player (false, true);
-    static Player playertwo = new Player (false, true);
-    static Player playerthree = new Player (false, true);
-    static Player playerfour = new Player (false, true);
+    static Player playerone = new Player (false, false);
+    static Player playertwo = new Player (false, false);
+    static Player playerthree = new Player (false, false);
+    static Player playerfour = new Player (false, false);
     static Player[] playerarray = {playerone, playertwo, playerthree, playerfour};
     static Card[][] cardpool;
     static int cardpoolsize;
@@ -157,6 +155,7 @@ public class Main {
     public static boolean getinitialcard() {
         System.out.println("\n");
         for (int i = 0; i < numberOfPlayer; i++) {
+            System.out.println("\n");
             System.out.println("Now welcome  " + playerarray[i].name + "  to pick his initial card");
             for (int j = 1; j <= 4; j++) {
                 System.out.println("What color do you want for your #" + j + " card?");
@@ -301,23 +300,32 @@ public class Main {
     }
 
     public static boolean turn(Player player) {
+        if (player.lose == true) {
+            return false;
+        }
         System.out.println("\n");
         System.out.println("#" + numberofturn + " turn:");
         Card currentcard = pickcardinturn(player);
         showboard(player);
-        showhand(player);
         showhandfromotherplayer(player);
+        showhand(player);
         if (currentcard != null) {
             String color = "B";
             if (currentcard.colorwithwhitetrueblackfalse == true) {
                 color = "W";
             }
-            System.out.print("\n");
-            System.out.print("Your current card is " + color + currentcard.number);
+            System.out.println("Your current card is " + color + currentcard.number + " with position " + currentcard.position);
             System.out.println("Note that if you make an incorrect guess, this card will be shown to everyone");
             System.out.print("\n");
         }
-        guess(player);
+        boolean succeed = guess(player);
+        if (succeed == false) {
+            boolean[] visible = {true, true, true, true};
+            currentcard.visible = visible;
+        }
+        if (ended == true) {
+            return true;
+        }
         System.out.println("This is the end of #" + numberofturn + " turn");
         numberofturn++;
         return true;
@@ -371,6 +379,7 @@ public class Main {
 
     public static boolean guess(Player player) {
         System.out.println("Now please make a guess on other player's card");
+        System.out.print("\n");
         Player playerguessed = guessplayer(player);
         while (playerguessed == null) {
             playerguessed = guessplayer(player);
@@ -380,6 +389,9 @@ public class Main {
             position = guessposition(playerguessed);
         }
         int color = guesscolor();
+        while (color == -1) {
+            color = guesscolor();
+        }
         boolean colorboolean = false;
         if (color <= 0) {
             colorboolean = true;
@@ -391,7 +403,7 @@ public class Main {
         Card guessingcard = findcardbyposition(position);
         boolean guessboolean = testforguess(guessingcard, number, color);
         Guess currentguess =  new Guess(player, playerguessed,
-                guessingcard, colorboolean, number, position, guessboolean);
+                guessingcard, colorboolean, number, position, guessboolean, false);
         currentguess.createguessoutput(numberofturn);
         history.add(currentguess);
         if (guessboolean == true) {
@@ -399,29 +411,41 @@ public class Main {
             System.out.println("Congratulations, this is a correct guess!");
             System.out.println("The new board is:");
             showboard(player);
+            showhandfromotherplayer(player);
             showhand(player);
+            if (testiflose(playerguessed) == true) {
+                Guess lost = new Guess(playerguessed, null, null,
+                        false, -1,null, false, true);
+                lost.createguessoutput(-1);
+                history.add(lost);
+                playerguessed.lose = true;
+            }
             if (testifwin(player) == true) {
                 changewinner(player);
                 System.out.println("\n");
                 System.out.println("This game is ended.");
                 System.out.println("The winner is  " + player.name + "  !");
                 System.out.println("Thank you for playing!");
+                return true;
             } else {
                 System.out.println("Do you want to keep guessing or to end this ture?");
                 System.out.println("0 for keep guessing and 1 for end turn");
                 int decision = scan.nextInt();
                 if (decision <= 0) {
                     return guess(player);
+                } else {
+                    return true;
                 }
             }
         } else {
             System.out.println("Sorry, you didn't guessed correctly");
+            return false;
         }
-        return true;
     }
 
     public static Player guessplayer(Player player) {
         System.out.println("The name of the player you want to guess is:");
+        System.out.println("If you want to see the guess history, please enter 'history'");
         String name = scan.next();
         for (int i = 0; i < numberOfPlayer; i++) {
             if (playerarray[i].equals(player)) {
@@ -430,6 +454,10 @@ public class Main {
             if (name.equals(playerarray[i].name)) {
                 return playerarray[i];
             }
+        }
+        if (name.equals("history")) {
+            printhistory();
+            return null;
         }
         System.out.println("The name you entered did not match any of other player's name, please try again");
         return null;
@@ -449,15 +477,19 @@ public class Main {
 
     public static int guesscolor() {
         System.out.println("The color you want to guess is:");
-        System.out.println("0 for white and 1 for black");
-        int color = scan.nextInt();
-        if (color < 0) {
-            color = 0;
+        System.out.println("W for white and B for black");
+        String color = scan.next();
+        int intcolor = -1;
+        if (color.equals("W")) {
+            intcolor = 0;
+            return intcolor;
         }
-        if (color > 1) {
-            color = 1;
+        if (color.equals("B")) {
+            intcolor = 1;
+            return intcolor;
         }
-        return color;
+        System.out.println("The color you entered is invalid, please try again");
+        return intcolor;
     }
 
     public static int guessnumber() {
@@ -484,14 +516,15 @@ public class Main {
     }
 
     public static boolean testifwin(Player player) {
-        boolean[] test = {true, true, true, true};
         for (int i = 0; i < numberOfPlayer; i++) {
             if (player.equals(playerarray[i])) {
                 continue;
             } else {
                 for (int j = 0; j < playerarray[i].hand.size(); j++) {
-                    if (playerarray[i].hand.get(j).visible != test) {
-                        return false;
+                    for (int k = 0; k < 4; k++) {
+                        if (playerarray[i].hand.get(j).visible[k] == false) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -500,22 +533,55 @@ public class Main {
     }
 
     public static boolean testiflose(Player player) {
-        //test if a player is lost so that no more move are carried out by that player
+        for (int i = 0; i < player.hand.size(); i++) {
+            for (int j = 0; j < 4; j++) {
+                if (player.hand.get(i).visible[j] == false) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
     public static void printhistory() {
-        //print the history of all guesses
+        System.out.println("\n");
+        for (int i = 0; i < history.size(); i++) {
+            System.out.println(history.get(i).output);
+        }
+        System.out.println("\n");
         return;
     }
 
     public static boolean rightguess(Card card) {
-        //change the card so that it's visiable to every one
+        boolean[] visible = {true, true, true, true};
+        card.visible = visible;
         return true;
     }
 
     public static boolean showhandfromotherplayer(Player player) {
-        //show your hand in other player's view
+        System.out.println("Your cards in other player's view are (with position string under them):");
+        boolean[] test = {true, true, true, true};
+        for (int i = 0; i < player.hand.size(); i++) {
+            if (player.hand.get(i).colorwithwhitetrueblackfalse == true) {
+                System.out.print("W");
+            } else {
+                System.out.print("B");
+            }
+            if (player.hand.get(i).visible == test){
+                System.out.print(player.hand.get(i).number + " ");
+            } else {
+                System.out.print("x ");
+            }
+        }
+        System.out.print("\n");
+        for (int k = 0; k < player.hand.size(); k++) {
+            if (player.hand.get(k).number >= 10 && player.hand.get(k).visible == test) {
+                System.out.print(player.hand.get(k).position + "  ");
+            } else {
+                System.out.print(player.hand.get(k).position + " ");
+            }
+        }
+        System.out.print("\n");
         return true;
     }
 
