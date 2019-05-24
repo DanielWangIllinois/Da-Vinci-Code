@@ -560,14 +560,19 @@ public class Main {
 
     public static boolean showhandfromotherplayer(Player player) {
         System.out.println("Your cards in other player's view are (with position string under them):");
-        boolean[] test = {true, true, true, true};
         for (int i = 0; i < player.hand.size(); i++) {
             if (player.hand.get(i).colorwithwhitetrueblackfalse == true) {
                 System.out.print("W");
             } else {
                 System.out.print("B");
             }
-            if (player.hand.get(i).visible == test){
+            boolean tmp = true;
+            for (int j = 0; j < 4; j++) {
+                if (player.hand.get(i).visible[j] != true){
+                    tmp = false;
+                }
+            }
+            if (tmp == true) {
                 System.out.print(player.hand.get(i).number + " ");
             } else {
                 System.out.print("x ");
@@ -575,7 +580,13 @@ public class Main {
         }
         System.out.print("\n");
         for (int k = 0; k < player.hand.size(); k++) {
-            if (player.hand.get(k).number >= 10 && player.hand.get(k).visible == test) {
+            boolean tmp = true;
+            for (int j = 0; j < 4; j++) {
+                if (player.hand.get(k).visible[j] != true){
+                    tmp = false;
+                }
+            }
+            if (tmp == true && player.hand.get(k).number >= 10) {
                 System.out.print(player.hand.get(k).position + "  ");
             } else {
                 System.out.print(player.hand.get(k).position + " ");
