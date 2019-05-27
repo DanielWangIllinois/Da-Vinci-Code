@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 public class Main {
     static Scanner scan = new Scanner(System.in);
-    public static Random rand = new Random();
+    static Random rand = new Random();
     static int numberOfPlayer;
     static boolean started = false;
     static boolean ended = false;
@@ -45,16 +45,16 @@ public class Main {
     }
 
     public static Card[][] newcardpool() {
-        Card[][] cardpooltoreturn = new Card[2][12];
-        for (int i = 0; i < 12; i++) {
+        Card[][] cardpooltoreturn = new Card[2][13];
+        for (int i = -1; i < 12; i++) {
             boolean[] visible = {false, false, false,false};
             Card card = new Card(i,true,visible,false);
-            cardpooltoreturn[0][i] = card;
+            cardpooltoreturn[0][i + 1] = card;
         }
-        for (int i = 0; i < 12; i++) {
+        for (int i = -1; i < 12; i++) {
             boolean[] visible = {false, false, false,false};
             Card card = new Card(i,false,visible,false);
-            cardpooltoreturn[1][i] = card;
+            cardpooltoreturn[1][i + 1] = card;
         }
         return cardpooltoreturn;
     }
@@ -62,7 +62,7 @@ public class Main {
     public static int getpoolsize() {
         int count = 0;
         for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 12; j++) {
+            for (int j = 0; j < 13; j++) {
                 if (cardpool[i][j].picked == false) {
                     count++;
                 }
@@ -73,7 +73,7 @@ public class Main {
 
     public static int countwhitepoolsize() {
         int count = 0;
-        for (int j = 0; j < 12; j++) {
+        for (int j = 0; j < 13; j++) {
             if (cardpool[0][j].picked == false) {
                 count++;
             }
@@ -83,7 +83,7 @@ public class Main {
 
     public static int countblackpoolsize() {
         int count = 0;
-        for (int j = 0; j < 12; j++) {
+        for (int j = 0; j < 13; j++) {
             if (cardpool[1][j].picked == false) {
                 count++;
             }
@@ -92,21 +92,21 @@ public class Main {
     }
 
     public static void shufflecardpool(Card[][] input) {
-        Card[] whitecard = new Card[12];
-        Card[] blackcard = new Card[12];
-        for (int i = 0; i < 12; i++) {
+        Card[] whitecard = new Card[13];
+        Card[] blackcard = new Card[13];
+        for (int i = 0; i < 13; i++) {
             whitecard[i] = input[0][i];
             blackcard[i] = input[1][i];
         }
-        for (int i = 12; i > 0; i--) {
+        for (int i = 13; i > 0; i--) {
             int randint = rand.nextInt(i);
             swap(whitecard, randint, i - 1);
         }
-        for (int i = 12; i > 0; i--) {
+        for (int i = 13; i > 0; i--) {
             int randint = rand.nextInt(i);
             swap(blackcard, randint, i - 1);
         }
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 13; i++) {
             input[0][i] = whitecard[i];
             input[1][i] = blackcard[i];
         }
@@ -206,7 +206,7 @@ public class Main {
 
     public static Card pickcardtoplayer(Player player, int color) {
         if (color <= 0) {
-            Card toreturn = cardpool[0][12 - whitecardpoolsize];
+            Card toreturn = cardpool[0][13 - whitecardpoolsize];
             toreturn.picked = true;
             createpositionbeforepick(player, toreturn);
             puttohand(player, toreturn);
@@ -218,7 +218,7 @@ public class Main {
             }
             return toreturn;
         } else {
-            Card toreturn = cardpool[1][12 - blackcardpoolsize];
+            Card toreturn = cardpool[1][13 - blackcardpoolsize];
             toreturn.picked = true;
             createpositionbeforepick(player, toreturn);
             puttohand(player, toreturn);
@@ -233,8 +233,8 @@ public class Main {
     }
 
     public static void createpositionbeforepick(Player player, Card card) {
-        String[] stringarray = {"N", "M", "P", "Q"};
-        String[] numberarray = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
+        String[] stringarray = {"M", "N", "P", "Q"};
+        String[] numberarray = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"};
         card.position = stringarray[findplayerindex(player)] + numberarray[player.hand.size()];
     }
 
@@ -266,7 +266,11 @@ public class Main {
             } else {
                 System.out.print("B");
             }
-            System.out.print(player.hand.get(i).number + " ");
+            if (player.hand.get(i).number == -1) {
+                System.out.print("- ");
+            } else {
+                System.out.print(player.hand.get(i).number + " ");
+            }
         }
         System.out.print("\n");
         for (int k = 0; k < player.hand.size(); k++) {
@@ -357,7 +361,11 @@ public class Main {
                         System.out.print("B");
                     }
                     if (playerarray[i].hand.get(j).visible[findplayerindex(player)] == true) {
-                        System.out.print(playerarray[i].hand.get(j).number + " ");
+                        if (playerarray[i].hand.get(j).number == -1) {
+                            System.out.print("- ");
+                        } else {
+                            System.out.print(playerarray[i].hand.get(j).number + " ");
+                        }
                     } else {
                         System.out.print("x ");
                     }
@@ -397,7 +405,7 @@ public class Main {
             colorboolean = true;
         }
         int number = guessnumber();
-        while (number == -1) {
+        while (number == -100) {
             number = guessnumber();
         }
         Card guessingcard = findcardbyposition(position);
@@ -468,7 +476,18 @@ public class Main {
         String position = scan.next();
         for (int i = 0; i < guessingplayer.hand.size(); i++) {
             if (position.equals(guessingplayer.hand.get(i).position)) {
-                return position;
+                boolean tmp = false;
+                for (int j = 0; j < 4; j++) {
+                    if (guessingplayer.hand.get(i).visible[j] != true) {
+                        tmp = true;
+                    }
+                }
+                if (tmp == true) {
+                    return position;
+                } else {
+                    System.out.println("The card correspond to the position you entered has already been guessed correctly, please try again");
+                    return null;
+                }
             }
         }
         System.out.println("The position you entered did not match any of the position, please try again");
@@ -493,13 +512,19 @@ public class Main {
     }
 
     public static int guessnumber() {
+        String[] stringarray = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
         System.out.println("The number you want to guess is:");
-        int number = scan.nextInt();
-        if (number >= 0 && number <= 11) {
-            return number;
+        String numberstring = scan.next();
+        if (numberstring.equals("-")) {
+            return -1;
         }
-        System.out.println("The number you entered is not in the range of [0, 11], please try again");
-        return -1;
+        for (int i = 0; i < 12; i++) {
+            if (numberstring.equals(stringarray[i])) {
+                return i;
+            }
+        }
+        System.out.println("The number you entered is not in the range of [0, 11] or '-', please try again");
+        return -100;
     }
 
     public static boolean testforguess(Card card, int number, int color) {
@@ -573,7 +598,11 @@ public class Main {
                 }
             }
             if (tmp == true) {
-                System.out.print(player.hand.get(i).number + " ");
+                if (player.hand.get(i).number == -1) {
+                    System.out.print("- ");
+                } else {
+                    System.out.print(player.hand.get(i).number + " ");
+                }
             } else {
                 System.out.print("x ");
             }
