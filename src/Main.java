@@ -212,6 +212,8 @@ public class Main {
             if (toreturn.realnumber == -1) {
                 player.needproactiveinsert = true;
                 changecardnumber(player, toreturn);
+            } else if (player.needproactiveinsert == true) {
+                insertcard(player, toreturn);
             }
             puttohand(player, toreturn);
             cardpoolsize--;
@@ -228,6 +230,8 @@ public class Main {
             if (toreturn.realnumber == -1) {
                 player.needproactiveinsert = true;
                 changecardnumber(player, toreturn);
+            } else if (player.needproactiveinsert == true) {
+                insertcard(player, toreturn);
             }
             puttohand(player, toreturn);
             cardpoolsize--;
@@ -240,7 +244,8 @@ public class Main {
         }
     }
 
-    public static void insertcard() {
+    public static void insertcard(Player player, Card card) {
+        System.out.print("Been here!" + "\n");
         return;
     }
 
@@ -316,7 +321,7 @@ public class Main {
         boolean nextto = false;
         if (leftposition.equals("L") && rightposition.equals(player.hand.get(0).position)) {
             nextto = true;
-        } else if (rightposition.equals("R") && rightposition.equals(player.hand.get(player.hand.size() - 1))) {
+        } else if (rightposition.equals("R") && leftposition.equals(player.hand.get(player.hand.size() - 1).position)) {
             nextto = true;
         } else if (leftpositionindex == rightpositionindex - 1 || leftpositionindex == rightpositionindex + 1) {
             nextto = true;
@@ -523,6 +528,7 @@ public class Main {
                 guessingcard, colorboolean, numberstring, position, guessboolean, false);
         currentguess.createguessoutput(numberofturn);
         history.add(currentguess);
+        playerguessed.needproactiveinsert = testforinsertion(playerguessed);
         if (guessboolean == true) {
             rightguess(guessingcard);
             System.out.println("Congratulations, this is a correct guess!");
@@ -585,13 +591,8 @@ public class Main {
         String position = scan.next();
         for (int i = 0; i < guessingplayer.hand.size(); i++) {
             if (position.equals(guessingplayer.hand.get(i).position)) {
-                boolean tmp = false;
-                for (int j = 0; j < 4; j++) {
-                    if (guessingplayer.hand.get(i).visible[j] != true) {
-                        tmp = true;
-                    }
-                }
-                if (tmp == true) {
+                boolean tmp = testforvisible(guessingplayer.hand.get(i));
+                if (tmp == false) {
                     return position;
                 } else {
                     System.out.println("The card correspond to the position you entered has already been guessed correctly, please try again");
@@ -655,10 +656,8 @@ public class Main {
                 continue;
             } else {
                 for (int j = 0; j < playerarray[i].hand.size(); j++) {
-                    for (int k = 0; k < 4; k++) {
-                        if (playerarray[i].hand.get(j).visible[k] == false) {
-                            return false;
-                        }
+                    if (testforvisible(playerarray[i].hand.get(j)) == false) {
+                        return false;
                     }
                 }
             }
@@ -668,10 +667,8 @@ public class Main {
 
     public static boolean testiflose(Player player) {
         for (int i = 0; i < player.hand.size(); i++) {
-            for (int j = 0; j < 4; j++) {
-                if (player.hand.get(i).visible[j] == false) {
-                    return false;
-                }
+            if (testforvisible(player.hand.get(i)) == false) {
+                return false;
             }
         }
         return true;
@@ -700,12 +697,7 @@ public class Main {
             } else {
                 System.out.print("B");
             }
-            boolean tmp = true;
-            for (int j = 0; j < 4; j++) {
-                if (player.hand.get(i).visible[j] != true){
-                    tmp = false;
-                }
-            }
+            boolean tmp = testforvisible(player.hand.get(i));
             if (tmp == true) {
                 if (player.hand.get(i).realnumber == -1) {
                     System.out.print("- ");
@@ -718,12 +710,7 @@ public class Main {
         }
         System.out.print("\n");
         for (int k = 0; k < player.hand.size(); k++) {
-            boolean tmp = true;
-            for (int j = 0; j < 4; j++) {
-                if (player.hand.get(k).visible[j] != true){
-                    tmp = false;
-                }
-            }
+            boolean tmp = testforvisible(player.hand.get(k));
             if (tmp == true && player.hand.get(k).realnumber >= 10) {
                 System.out.print(player.hand.get(k).position + "  ");
             } else {
@@ -762,5 +749,27 @@ public class Main {
     public static void changewinner (Player player) {
         player.win = true;
         ended = true;
+    }
+
+    public static boolean testforvisible (Card card) {
+        for (int i  = 0; i < 4; i++) {
+            if (card.visible[i] == false) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean testforinsertion (Player player) {
+        if (player.needproactiveinsert == false) {
+            return false;
+        } else {
+            for (int i = 0; i < player.hand.size(); i++) {
+                if (player.hand.get(i).realnumber == -1 && testforvisible(player.hand.get(i)) == false) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
