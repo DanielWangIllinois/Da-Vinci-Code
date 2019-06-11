@@ -5,11 +5,11 @@ public class Guess {
     Card cardguessed;
     boolean color;
     boolean succeed;
-    int guessednumber;
+    String guessednumber;
     String position;
     boolean lost;
     Guess(Player guessing, Player guessed, Card inputcard,
-          boolean colorboolean, int number, String position, boolean successboolean, boolean lost) {
+          boolean colorboolean, String number, String position, boolean successboolean, boolean lost) {
         this.playerguessing = guessing;
         this.playerguessed = guessed;
         this.cardguessed = inputcard;
