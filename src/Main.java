@@ -10,25 +10,25 @@ public class Main {
     static int numberOfPlayer;
     static boolean started = false;
     static boolean ended = false;
-    static Player playerone = new Player (false, false);
-    static Player playertwo = new Player (false, false);
-    static Player playerthree = new Player (false, false);
-    static Player playerfour = new Player (false, false);
-    static Player[] playerarray = {playerone, playertwo, playerthree, playerfour};
-    static Card[][] cardpool;
-    static int cardpoolsize;
-    static int whitecardpoolsize;
-    static int blackcardpoolsize;
-    static int numberofturn = 1;
+    static Player playerOne = new Player (false, false);
+    static Player playerTwo = new Player (false, false);
+    static Player playerThree = new Player (false, false);
+    static Player playerFour = new Player (false, false);
+    static Player[] playerArray = {playerOne, playerTwo, playerThree, playerFour};
+    static Card[][] cardPool;
+    static int cardPoolSize;
+    static int whiteCardPoolSize;
+    static int blackCardPoolSize;
+    static int numberOfTurn = 1;
     static ArrayList<Guess> history = new ArrayList<>();
 
     public static void main(String [] args) {
-        cardpool = newcardpool();
-        cardpoolsize = getpoolsize();
-        whitecardpoolsize = countwhitepoolsize();
-        blackcardpoolsize = countblackpoolsize();
+        cardPool = newcardpool();
+        cardPoolSize = getpoolsize();
+        whiteCardPoolSize = countwhitepoolsize();
+        blackCardPoolSize = countblackpoolsize();
         for (int i = 1; i <= 10; i++) {
-            shufflecardpool(cardpool);
+            shufflecardpool(cardPool);
         }
         while (started == false) {
             start();
@@ -36,7 +36,7 @@ public class Main {
         getinitialcard();
         while (ended == false) {
             for (int i = 0; i < numberOfPlayer; i++) {
-                turn(playerarray[i]);
+                turn(playerArray[i]);
                 if (ended == true) {
                     break;
                 }
@@ -63,7 +63,7 @@ public class Main {
         int count = 0;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 13; j++) {
-                if (cardpool[i][j].picked == false) {
+                if (cardPool[i][j].picked == false) {
                     count++;
                 }
             }
@@ -74,7 +74,7 @@ public class Main {
     public static int countwhitepoolsize() {
         int count = 0;
         for (int j = 0; j < 13; j++) {
-            if (cardpool[0][j].picked == false) {
+            if (cardPool[0][j].picked == false) {
                 count++;
             }
         }
@@ -84,7 +84,7 @@ public class Main {
     public static int countblackpoolsize() {
         int count = 0;
         for (int j = 0; j < 13; j++) {
-            if (cardpool[1][j].picked == false) {
+            if (cardPool[1][j].picked == false) {
                 count++;
             }
         }
@@ -133,20 +133,20 @@ public class Main {
         for (int i = 1; i <= numberOfPlayer; i++) {
             System.out.println("What's the name of #" + i + " player?");
             String tmpStringForNameInput = scan.next();
-            playerone.name = playertwo.name;
-            playertwo.name = playerthree.name;
-            playerthree.name = playerfour.name;
-            playerfour.name = tmpStringForNameInput;
+            playerOne.name = playerTwo.name;
+            playerTwo.name = playerThree.name;
+            playerThree.name = playerFour.name;
+            playerFour.name = tmpStringForNameInput;
         }
-        while (playerone.name == null) {
-            String tmpStringForNameSwap = playerone.name;
-            playerone.name = playertwo.name;
-            playertwo.name = playerthree.name;
-            playerthree.name = playerfour.name;
-            playerfour.name = tmpStringForNameSwap;
+        while (playerOne.name == null) {
+            String tmpStringForNameSwap = playerOne.name;
+            playerOne.name = playerTwo.name;
+            playerTwo.name = playerThree.name;
+            playerThree.name = playerFour.name;
+            playerFour.name = tmpStringForNameSwap;
         }
         for (int i = numberOfPlayer; i < 4; i++) {
-            playerarray[i].lose = true;
+            playerArray[i].lose = true;
         }
         started = true;
         return true;
@@ -156,15 +156,15 @@ public class Main {
         System.out.println("\n");
         for (int i = 0; i < numberOfPlayer; i++) {
             System.out.println("\n");
-            System.out.println("Now welcome  " + playerarray[i].name + "  to pick his initial card");
+            System.out.println("Now welcome  " + playerArray[i].name + "  to pick his initial card");
             for (int j = 1; j <= 4; j++) {
                 System.out.println("What color do you want for your #" + j + " card?");
                 int color = getavailablecolor();
                 if (color != -1) {
-                    pickcardtoplayer(playerarray[i], color);
+                    pickcardtoplayer(playerArray[i], color);
                 }
             }
-            showhand(playerarray[i]);
+            showhand(playerArray[i]);
         }
         return true;
     }
@@ -172,12 +172,12 @@ public class Main {
     public static int getavailablecolor() {
         if (pickwhite() == false) {
             if (pickblack() == false) {
-                System.out.println("The cardpool is out of card");
+                System.out.println("The cardPool is out of card");
                 System.out.println("Please type c and enter to continue");
                 String useless = scan.next();
                 return -1;
             } else {
-                System.out.println("There's only black card left in the cardpool");
+                System.out.println("There's only black card left in the cardPool");
                 System.out.println("Automatically picked black card");
                 System.out.println("Please type c and enter to continue");
                 String useless = scan.next();
@@ -185,9 +185,9 @@ public class Main {
             }
         } else {
             if (pickblack() == false) {
-                System.out.println("There's only white card left in the cardpool");
+                System.out.println("There's only white card left in the cardPool");
                 System.out.println("Automatically picked white card");
-                System.out.println("Please type c and enter continue");
+                System.out.println("Please type c and enter to continue");
                 String useless = scan.next();
                 return 0;
             } else {
@@ -206,36 +206,36 @@ public class Main {
 
     public static Card pickcardtoplayer(Player player, int color) {
         if (color <= 0) {
-            Card toreturn = cardpool[0][13 - whitecardpoolsize];
+            Card toreturn = cardPool[0][13 - whiteCardPoolSize];
             toreturn.picked = true;
             createpositionbeforepick(player, toreturn);
             if (toreturn.realnumber == -1) {
-                player.needproactiveinsert = true;
+                player.needProactiveInsert = true;
                 changecardnumber(player, toreturn);
-            } else if (player.needproactiveinsert == true) {
+            } else if (player.needProactiveInsert == true) {
                 insertcard(player, toreturn);
             }
             puttohand(player, toreturn);
-            cardpoolsize--;
-            whitecardpoolsize--;
+            cardPoolSize--;
+            whiteCardPoolSize--;
             if (checkcardpoolsize() == false) {
                 System.out.println("Bug appeared");
                 return null;
             }
             return toreturn;
         } else {
-            Card toreturn = cardpool[1][13 - blackcardpoolsize];
+            Card toreturn = cardPool[1][13 - blackCardPoolSize];
             toreturn.picked = true;
             createpositionbeforepick(player, toreturn);
             if (toreturn.realnumber == -1) {
-                player.needproactiveinsert = true;
+                player.needProactiveInsert = true;
                 changecardnumber(player, toreturn);
-            } else if (player.needproactiveinsert == true) {
+            } else if (player.needProactiveInsert == true) {
                 insertcard(player, toreturn);
             }
             puttohand(player, toreturn);
-            cardpoolsize--;
-            blackcardpoolsize--;
+            cardPoolSize--;
+            blackCardPoolSize--;
             if (checkcardpoolsize() == false) {
                 System.out.println("Bug appeared");
                 return null;
@@ -245,6 +245,11 @@ public class Main {
     }
 
     public static void insertcard(Player player, Card card) {
+        //在将新的非连字符插入手牌的时候，我们需要考虑以下这几种情况：
+        //1、手牌里只有连字符
+        //2、手牌里只有连字符和连字符的一边有数字牌
+        //3、手牌里连字符的两边都有数字牌
+        //之后我们就要判断在放完牌之后连字符的两侧是否有暗着的牌、亮着的牌或根本没有牌
         System.out.print("Been here!" + "\n");
         return;
     }
@@ -391,8 +396,8 @@ public class Main {
     }
 
     public static boolean checkcardpoolsize() {
-        if (getpoolsize() == cardpoolsize) {
-            if (countwhitepoolsize() == whitecardpoolsize && countblackpoolsize() == blackcardpoolsize) {
+        if (getpoolsize() == cardPoolSize) {
+            if (countwhitepoolsize() == whiteCardPoolSize && countblackpoolsize() == blackCardPoolSize) {
                 return true;
             }
         }
@@ -402,7 +407,7 @@ public class Main {
     public static int findplayerindex(Player player) {
         int playerindex = -1;
         for (int i = 0; i < numberOfPlayer; i++) {
-            if (player.equals(playerarray[i])) {
+            if (player.equals(playerArray[i])) {
                 playerindex = i;
             }
         }
@@ -414,7 +419,7 @@ public class Main {
             return false;
         }
         System.out.println("\n");
-        System.out.println("#" + numberofturn + " turn:");
+        System.out.println("#" + numberOfTurn + " turn:");
         Card currentcard = pickcardinturn(player);
         showboard(player);
         showhandfromotherplayer(player);
@@ -440,14 +445,14 @@ public class Main {
         if (ended == true) {
             return true;
         }
-        System.out.println("This is the end of #" + numberofturn + " turn");
-        numberofturn++;
+        System.out.println("This is the end of #" + numberOfTurn + " turn");
+        numberOfTurn++;
         return true;
     }
 
     public static Card pickcardinturn(Player player) {
         System.out.println("\n");
-        System.out.println("Welcome  " + playerarray[findplayerindex(player)].name + "  to pick a card");
+        System.out.println("Welcome  " + playerArray[findplayerindex(player)].name + "  to pick a card");
         int color = getavailablecolor();
         if (color != -1) {
             Card cardpicked = pickcardtoplayer(player, color);
@@ -460,33 +465,33 @@ public class Main {
     public static boolean showboard(Player player) {
         System.out.print("\n");
         for (int i = 0; i < numberOfPlayer; i++) {
-            if (playerarray[i].equals(player)) {
+            if (playerArray[i].equals(player)) {
                 continue;
             } else {
-                System.out.println(playerarray[i].name + "'s card (with position string under them):");
-                for (int j = 0; j < playerarray[i].hand.size(); j++) {
-                    if (playerarray[i].hand.get(j).colorwithwhitetrueblackfalse == true) {
+                System.out.println(playerArray[i].name + "'s card (with position string under them):");
+                for (int j = 0; j < playerArray[i].hand.size(); j++) {
+                    if (playerArray[i].hand.get(j).colorwithwhitetrueblackfalse == true) {
                         System.out.print("W");
                     } else {
                         System.out.print("B");
                     }
-                    if (playerarray[i].hand.get(j).visible[findplayerindex(player)] == true) {
-                        if (playerarray[i].hand.get(j).realnumber == -1) {
+                    if (playerArray[i].hand.get(j).visible[findplayerindex(player)] == true) {
+                        if (playerArray[i].hand.get(j).realnumber == -1) {
                             System.out.print("- ");
                         } else {
-                            System.out.print(playerarray[i].hand.get(j).realnumber + " ");
+                            System.out.print(playerArray[i].hand.get(j).realnumber + " ");
                         }
                     } else {
                         System.out.print("x ");
                     }
                 }
                 System.out.print("\n");
-                for (int k = 0; k < playerarray[i].hand.size(); k++) {
-                    if (playerarray[i].hand.get(k).realnumber >= 10
-                            && playerarray[i].hand.get(k).visible[findplayerindex(player)] == true) {
-                        System.out.print(playerarray[i].hand.get(k).position + "  ");
+                for (int k = 0; k < playerArray[i].hand.size(); k++) {
+                    if (playerArray[i].hand.get(k).realnumber >= 10
+                            && playerArray[i].hand.get(k).visible[findplayerindex(player)] == true) {
+                        System.out.print(playerArray[i].hand.get(k).position + "  ");
                     } else {
-                        System.out.print(playerarray[i].hand.get(k).position + " ");
+                        System.out.print(playerArray[i].hand.get(k).position + " ");
                     }
                 }
                 System.out.print("\n");
@@ -526,9 +531,9 @@ public class Main {
         }
         Guess currentguess =  new Guess(player, playerguessed,
                 guessingcard, colorboolean, numberstring, position, guessboolean, false);
-        currentguess.createguessoutput(numberofturn);
+        currentguess.createguessoutput(numberOfTurn);
         history.add(currentguess);
-        playerguessed.needproactiveinsert = testforinsertion(playerguessed);
+        playerguessed.needProactiveInsert = testforinsertion(playerguessed);
         if (guessboolean == true) {
             rightguess(guessingcard);
             System.out.println("Congratulations, this is a correct guess!");
@@ -571,11 +576,11 @@ public class Main {
         System.out.println("If you want to see the guess history, please enter 'history'");
         String name = scan.next();
         for (int i = 0; i < numberOfPlayer; i++) {
-            if (playerarray[i].equals(player)) {
+            if (playerArray[i].equals(player)) {
                 continue;
             }
-            if (name.equals(playerarray[i].name)) {
-                return playerarray[i];
+            if (name.equals(playerArray[i].name)) {
+                return playerArray[i];
             }
         }
         if (name.equals("history")) {
@@ -652,11 +657,11 @@ public class Main {
 
     public static boolean testifwin(Player player) {
         for (int i = 0; i < numberOfPlayer; i++) {
-            if (player.equals(playerarray[i])) {
+            if (player.equals(playerArray[i])) {
                 continue;
             } else {
-                for (int j = 0; j < playerarray[i].hand.size(); j++) {
-                    if (testforvisible(playerarray[i].hand.get(j)) == false) {
+                for (int j = 0; j < playerArray[i].hand.size(); j++) {
+                    if (testforvisible(playerArray[i].hand.get(j)) == false) {
                         return false;
                     }
                 }
@@ -723,9 +728,9 @@ public class Main {
 
     public static Card findcardbyposition(String position) {
         for (int i = 0; i < numberOfPlayer; i++) {
-            for (int j = 0; j < playerarray[i].hand.size(); j++) {
-                if (playerarray[i].hand.get(j).position.equals(position)) {
-                    return playerarray[i].hand.get(j);
+            for (int j = 0; j < playerArray[i].hand.size(); j++) {
+                if (playerArray[i].hand.get(j).position.equals(position)) {
+                    return playerArray[i].hand.get(j);
                 }
             }
         }
@@ -761,7 +766,7 @@ public class Main {
     }
 
     public static boolean testforinsertion (Player player) {
-        if (player.needproactiveinsert == false) {
+        if (player.needProactiveInsert == false) {
             return false;
         } else {
             for (int i = 0; i < player.hand.size(); i++) {
