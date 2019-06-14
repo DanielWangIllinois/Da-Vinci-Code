@@ -45,18 +45,18 @@ public class Main {
     }
 
     private static Card[][] newCardpool() {
-        Card[][] cardpooltoreturn = new Card[2][13];
+        Card[][] cardpoolToReturn = new Card[2][13];
         for (int i = -1; i < 12; i++) {
             boolean[] visible = {false, false, false,false};
             Card card = new Card(i, i,true,visible,false);
-            cardpooltoreturn[0][i + 1] = card;
+            cardpoolToReturn[0][i + 1] = card;
         }
         for (int i = -1; i < 12; i++) {
             boolean[] visible = {false, false, false,false};
             Card card = new Card(i, i,false,visible,false);
-            cardpooltoreturn[1][i + 1] = card;
+            cardpoolToReturn[1][i + 1] = card;
         }
-        return cardpooltoreturn;
+        return cardpoolToReturn;
     }
 
     private static int getPoolSize() {
@@ -92,42 +92,40 @@ public class Main {
     }
 
     private static void shuffleCardpool(Card[][] input) {
-        Card[] whitecard = new Card[13];
-        Card[] blackcard = new Card[13];
+        Card[] whiteCard = new Card[13];
+        Card[] blackCard = new Card[13];
         for (int i = 0; i < 13; i++) {
-            whitecard[i] = input[0][i];
-            blackcard[i] = input[1][i];
+            whiteCard[i] = input[0][i];
+            blackCard[i] = input[1][i];
         }
         for (int i = 13; i > 0; i--) {
-            int randint = rand.nextInt(i);
-            swap(whitecard, randint, i - 1);
+            swap(whiteCard, rand.nextInt(i), i - 1);
         }
         for (int i = 13; i > 0; i--) {
-            int randint = rand.nextInt(i);
-            swap(blackcard, randint, i - 1);
+            swap(blackCard, rand.nextInt(i), i - 1);
         }
         for (int i = 0; i < 13; i++) {
-            input[0][i] = whitecard[i];
-            input[1][i] = blackcard[i];
+            input[0][i] = whiteCard[i];
+            input[1][i] = blackCard[i];
         }
     }
 
-    private static void swap (Card[] inputarray, int i, int j) {
-        Card tmpcard = inputarray[i];
-        inputarray[i] = inputarray[j];
-        inputarray[j] = tmpcard;
+    private static void swap (Card[] inputArray, int i, int j) {
+        Card tmpCard = inputArray[i];
+        inputArray[i] = inputArray[j];
+        inputArray[j] = tmpCard;
     }
 
-    private static boolean start() {
+    private static void start() {
         System.out.println("Welcome to The Da Vinci Code" + "\n");
         System.out.println("How many people is playing this game?");
         numberOfPlayer = scan.nextInt();
         if (numberOfPlayer >= 5) {
             System.out.println("Sorry, this game could not have more than 4 players" + "\n");
-            return false;
+            return;
         } else if (numberOfPlayer <= 0) {
             System.out.println("Sorry, this game could not have less than 1 player" + "\n");
-            return false;
+            return;
         }
         System.out.println("Warmest welcome for all of our " + numberOfPlayer + " players");
         for (int i = 1; i <= numberOfPlayer; i++) {
@@ -149,7 +147,6 @@ public class Main {
             playerArray[i].lose = true;
         }
         started = true;
-        return true;
     }
 
     private static void getInitialCard() {
@@ -247,8 +244,8 @@ public class Main {
         if (player.hand.size() != 0) {
             String leftposition = null;
             String rightposition = null;
-            double leftindex;
-            double rightindex;
+            double leftIndex;
+            double rightIndex;
             boolean nextto = false;
             while (!nextto) {
                 showHand(player);
@@ -261,17 +258,17 @@ public class Main {
                 nextto = checkIfNextto(leftposition, rightposition, player);
             }
             if (leftposition.equals("L")) {
-                leftindex = -1;
+                leftIndex = -1;
             } else {
-                leftindex = findCardByPosition(leftposition).number;
+                leftIndex = findCardByPosition(leftposition).number;
             }
             if (rightposition.equals("R")) {
-                rightindex = 12;
+                rightIndex = 12;
             } else {
-                rightindex = findCardByPosition(rightposition).number;
+                rightIndex = findCardByPosition(rightposition).number;
             }
-            card.number  = (leftindex + rightindex) / 2;
-            if (leftindex == rightindex) {
+            card.number  = (leftIndex + rightIndex) / 2;
+            if (leftIndex == rightIndex) {
                 for (int i = 0; i < player.hand.size(); i++) {
                     if (player.hand.get(i).equals(card)) {
                         player.hand.get(i - 1).number = card.number - 0.1;
@@ -330,9 +327,9 @@ public class Main {
     }
 
     private static void createPositionBeforePick(Player player, Card card) {
-        String[] stringarray = {"M", "N", "P", "Q"};
-        String[] numberarray = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"};
-        card.position = stringarray[findPlayerIndex(player)] + numberarray[player.hand.size()];
+        String[] stringArray = {"M", "N", "P", "Q"};
+        String[] numberArray = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"};
+        card.position = stringArray[findPlayerIndex(player)] + numberArray[player.hand.size()];
     }
 
     private static void putToHand(Player player, Card card) {
