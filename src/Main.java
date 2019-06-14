@@ -5,22 +5,22 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Main {
-    static Scanner scan = new Scanner(System.in);
-    static Random rand = new Random();
-    static int numberOfPlayer;
-    static boolean started = false;
-    static boolean ended = false;
-    static Player playerOne = new Player (false, false);
-    static Player playerTwo = new Player (false, false);
-    static Player playerThree = new Player (false, false);
-    static Player playerFour = new Player (false, false);
-    static Player[] playerArray = {playerOne, playerTwo, playerThree, playerFour};
-    static Card[][] cardpool;
-    static int cardpoolSize;
-    static int whiteCardpoolSize;
-    static int blackCardpoolSize;
-    static int numberOfTurn = 1;
-    static ArrayList<Guess> history = new ArrayList<>();
+    private static Scanner scan = new Scanner(System.in);
+    private static Random rand = new Random();
+    private static int numberOfPlayer;
+    private static boolean started = false;
+    private static boolean ended = false;
+    private static Player playerOne = new Player (false, false);
+    private static Player playerTwo = new Player (false, false);
+    private static Player playerThree = new Player (false, false);
+    private static Player playerFour = new Player (false, false);
+    private static Player[] playerArray = {playerOne, playerTwo, playerThree, playerFour};
+    private static Card[][] cardpool;
+    private static int cardpoolSize;
+    private static int whiteCardpoolSize;
+    private static int blackCardpoolSize;
+    private static int numberOfTurn = 1;
+    private static ArrayList<Guess> history = new ArrayList<>();
 
     public static void main(String [] args) {
         cardpool = newCardpool();
@@ -44,7 +44,7 @@ public class Main {
         }
     }
 
-    public static Card[][] newCardpool() {
+    private static Card[][] newCardpool() {
         Card[][] cardpooltoreturn = new Card[2][13];
         for (int i = -1; i < 12; i++) {
             boolean[] visible = {false, false, false,false};
@@ -59,7 +59,7 @@ public class Main {
         return cardpooltoreturn;
     }
 
-    public static int getPoolSize() {
+    private static int getPoolSize() {
         int count = 0;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 13; j++) {
@@ -71,7 +71,7 @@ public class Main {
         return count;
     }
 
-    public static int countWhitePoolSize() {
+    private static int countWhitePoolSize() {
         int count = 0;
         for (int j = 0; j < 13; j++) {
             if (cardpool[0][j].picked == false) {
@@ -81,7 +81,7 @@ public class Main {
         return count;
     }
 
-    public static int countBlackPoolSize() {
+    private static int countBlackPoolSize() {
         int count = 0;
         for (int j = 0; j < 13; j++) {
             if (cardpool[1][j].picked == false) {
@@ -91,7 +91,7 @@ public class Main {
         return count;
     }
 
-    public static void shuffleCardpool(Card[][] input) {
+    private static void shuffleCardpool(Card[][] input) {
         Card[] whitecard = new Card[13];
         Card[] blackcard = new Card[13];
         for (int i = 0; i < 13; i++) {
@@ -112,13 +112,13 @@ public class Main {
         }
     }
 
-    public static void swap (Card[] inputarray, int i, int j) {
+    private static void swap (Card[] inputarray, int i, int j) {
         Card tmpcard = inputarray[i];
         inputarray[i] = inputarray[j];
         inputarray[j] = tmpcard;
     }
 
-    public static boolean start() {
+    private static boolean start() {
         System.out.println("Welcome to The Da Vinci Code" + "\n");
         System.out.println("How many people is playing this game?");
         numberOfPlayer = scan.nextInt();
@@ -152,7 +152,7 @@ public class Main {
         return true;
     }
 
-    public static boolean getInitialCard() {
+    private static boolean getInitialCard() {
         System.out.println("\n");
         for (int i = 0; i < numberOfPlayer; i++) {
             System.out.println("\n");
@@ -169,7 +169,7 @@ public class Main {
         return true;
     }
 
-    public static int getAvailableColor() {
+    private static int getAvailableColor() {
         if (pickWhite() == false) {
             if (pickBlack() == false) {
                 System.out.println("The cardpool is out of card");
@@ -204,7 +204,7 @@ public class Main {
         }
     }
 
-    public static Card pickCardToPlayer(Player player, int color) {
+    private static Card pickCardToPlayer(Player player, int color) {
         if (color <= 0) {
             Card toreturn = cardpool[0][13 - whiteCardpoolSize];
             toreturn.picked = true;
@@ -244,7 +244,7 @@ public class Main {
         }
     }
 
-    public static void insertCard(Player player, Card card) {
+    private static void insertCard(Player player, Card card) {
         //在将新的非连字符插入手牌的时候，我们需要考虑以下这几种情况：
         //1、手牌里只有连字符
         //2、手牌里只有连字符和连字符的一边有数字牌
@@ -254,7 +254,7 @@ public class Main {
         return;
     }
 
-    public static void changeCardNumber(Player player, Card card) {
+    private static void changeCardNumber(Player player, Card card) {
         if (player.hand.size() == 0) {
             return;
         } else {
@@ -296,7 +296,7 @@ public class Main {
         }
     }
 
-    public static boolean checkIfNextto(String leftposition, String rightposition, Player player) {
+    private static boolean checkIfNextto(String leftposition, String rightposition, Player player) {
         boolean leftisposition = false;
         boolean rightisposition = false;
         int leftpositionindex = -100;
@@ -343,13 +343,13 @@ public class Main {
         return true;
     }
 
-    public static void createPositionBeforePick(Player player, Card card) {
+    private static void createPositionBeforePick(Player player, Card card) {
         String[] stringarray = {"M", "N", "P", "Q"};
         String[] numberarray = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"};
         card.position = stringarray[findPlayerIndex(player)] + numberarray[player.hand.size()];
     }
 
-    public static boolean putToHand(Player player, Card card) {
+    private static boolean putToHand(Player player, Card card) {
         player.hand.add(card);
         Collections.sort(player.hand, new Comparator<Card>(){
             public int compare(Card x, Card y) {
@@ -369,7 +369,7 @@ public class Main {
         return true;
     }
 
-    public static boolean showHand(Player player) {
+    private static boolean showHand(Player player) {
         System.out.println("Your cards are (with position string under them):");
         for (int i = 0; i < player.hand.size(); i++) {
             if (player.hand.get(i).colorWithWhiteTrueBlackFalse == true) {
@@ -395,7 +395,7 @@ public class Main {
         return true;
     }
 
-    public static boolean checkCardpoolSize() {
+    private static boolean checkCardpoolSize() {
         if (getPoolSize() == cardpoolSize) {
             if (countWhitePoolSize() == whiteCardpoolSize && countBlackPoolSize() == blackCardpoolSize) {
                 return true;
@@ -404,7 +404,7 @@ public class Main {
         return false;
     }
 
-    public static int findPlayerIndex(Player player) {
+    private static int findPlayerIndex(Player player) {
         int playerindex = -1;
         for (int i = 0; i < numberOfPlayer; i++) {
             if (player.equals(playerArray[i])) {
@@ -414,7 +414,7 @@ public class Main {
         return playerindex;
     }
 
-    public static boolean turn(Player player) {
+    private static boolean turn(Player player) {
         if (player.lose == true) {
             return false;
         }
@@ -450,7 +450,7 @@ public class Main {
         return true;
     }
 
-    public static Card pickCardInTurn(Player player) {
+    private static Card pickCardInTurn(Player player) {
         System.out.println("\n");
         System.out.println("Welcome  " + playerArray[findPlayerIndex(player)].name + "  to pick a card");
         int color = getAvailableColor();
@@ -462,7 +462,7 @@ public class Main {
         }
     }
 
-    public static boolean showBoard(Player player) {
+    private static boolean showBoard(Player player) {
         System.out.print("\n");
         for (int i = 0; i < numberOfPlayer; i++) {
             if (playerArray[i].equals(player)) {
@@ -500,7 +500,7 @@ public class Main {
         return true;
     }
 
-    public static boolean guess(Player player) {
+    private static boolean guess(Player player) {
         System.out.println("Now please make a guess on other player's card");
         System.out.print("\n");
         Player playerguessed = guessPlayer(player);
@@ -530,7 +530,7 @@ public class Main {
             numberstring = "-";
         }
         Guess currentguess =  new Guess(player, playerguessed,
-                guessingcard, colorboolean, numberstring, position, guessboolean, false);
+                colorboolean, numberstring, position, guessboolean, false);
         currentguess.createGuessOutput(numberOfTurn);
         history.add(currentguess);
         playerguessed.needProactiveInsert = testForInsertion(playerguessed);
@@ -542,7 +542,7 @@ public class Main {
             showHandFromOtherPlayer(player);
             showHand(player);
             if (testIfLose(playerguessed) == true) {
-                Guess lost = new Guess(playerguessed, null, null,
+                Guess lost = new Guess(playerguessed, null,
                         false, null,null, false, true);
                 lost.createGuessOutput(-1);
                 history.add(lost);
@@ -571,7 +571,7 @@ public class Main {
         }
     }
 
-    public static Player guessPlayer(Player player) {
+    private static Player guessPlayer(Player player) {
         System.out.println("The name of the player you want to guess is:");
         System.out.println("If you want to see the guess history, please enter 'history'");
         String name = scan.next();
@@ -591,7 +591,7 @@ public class Main {
         return null;
     }
 
-    public static String guessPosition(Player guessingplayer) {
+    private static String guessPosition(Player guessingplayer) {
         System.out.println("The position you want to guess is:");
         String position = scan.next();
         for (int i = 0; i < guessingplayer.hand.size(); i++) {
@@ -609,7 +609,7 @@ public class Main {
         return null;
     }
 
-    public static int guessColor() {
+    private static int guessColor() {
         System.out.println("The color you want to guess is:");
         System.out.println("W for white and B for black");
         String color = scan.next();
@@ -626,7 +626,7 @@ public class Main {
         return intcolor;
     }
 
-    public static int guessNumber() {
+    private static int guessNumber() {
         String[] stringarray = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
         System.out.println("The number you want to guess is:");
         String numberstring = scan.next();
@@ -642,7 +642,7 @@ public class Main {
         return -100;
     }
 
-    public static boolean testForGuess(Card card, int number, int color) {
+    private static boolean testForGuess(Card card, int number, int color) {
         boolean colorboolean = false;
         if (color <= 0) {
             colorboolean = true;
@@ -655,7 +655,7 @@ public class Main {
         return false;
     }
 
-    public static boolean testIfWin(Player player) {
+    private static boolean testIfWin(Player player) {
         for (int i = 0; i < numberOfPlayer; i++) {
             if (player.equals(playerArray[i])) {
                 continue;
@@ -670,7 +670,7 @@ public class Main {
         return true;
     }
 
-    public static boolean testIfLose(Player player) {
+    private static boolean testIfLose(Player player) {
         for (int i = 0; i < player.hand.size(); i++) {
             if (testForVisible(player.hand.get(i)) == false) {
                 return false;
@@ -679,7 +679,7 @@ public class Main {
         return true;
     }
 
-    public static void printHistory() {
+    private static void printHistory() {
         System.out.println("\n");
         for (int i = 0; i < history.size(); i++) {
             System.out.println(history.get(i).output);
@@ -688,13 +688,13 @@ public class Main {
         return;
     }
 
-    public static boolean rightGuess(Card card) {
+    private static boolean rightGuess(Card card) {
         boolean[] visible = {true, true, true, true};
         card.visible = visible;
         return true;
     }
 
-    public static boolean showHandFromOtherPlayer(Player player) {
+    private static boolean showHandFromOtherPlayer(Player player) {
         System.out.println("Your cards in other player's view are (with position string under them):");
         for (int i = 0; i < player.hand.size(); i++) {
             if (player.hand.get(i).colorWithWhiteTrueBlackFalse == true) {
@@ -726,7 +726,7 @@ public class Main {
         return true;
     }
 
-    public static Card findCardByPosition(String position) {
+    private static Card findCardByPosition(String position) {
         for (int i = 0; i < numberOfPlayer; i++) {
             for (int j = 0; j < playerArray[i].hand.size(); j++) {
                 if (playerArray[i].hand.get(j).position.equals(position)) {
@@ -737,26 +737,26 @@ public class Main {
         return null;
     }
 
-    public static boolean pickWhite() {
+    private static boolean pickWhite() {
         if (countWhitePoolSize() <= 0) {
             return false;
         }
         return true;
     }
 
-    public static boolean pickBlack() {
+    private static boolean pickBlack() {
         if (countBlackPoolSize() <= 0) {
             return false;
         }
         return true;
     }
 
-    public static void changeWinner(Player player) {
+    private static void changeWinner(Player player) {
         player.win = true;
         ended = true;
     }
 
-    public static boolean testForVisible(Card card) {
+    private static boolean testForVisible(Card card) {
         for (int i  = 0; i < 4; i++) {
             if (card.visible[i] == false) {
                 return false;
@@ -765,7 +765,7 @@ public class Main {
         return true;
     }
 
-    public static boolean testForInsertion(Player player) {
+    private static boolean testForInsertion(Player player) {
         if (player.needProactiveInsert == false) {
             return false;
         } else {

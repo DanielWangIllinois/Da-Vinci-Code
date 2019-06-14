@@ -1,18 +1,16 @@
-public class Guess {
+class Guess {
     String output;
-    Player playerGuessing;
-    Player playerGuessed;
-    Card cardGuessed;
-    boolean color;
-    boolean succeed;
-    String guessedNumber;
-    String position;
-    boolean lost;
-    Guess(Player guessing, Player guessed, Card inputcard,
-          boolean colorboolean, String number, String position, boolean successboolean, boolean lost) {
+    private Player playerGuessing;
+    private Player playerGuessed;
+    private boolean color;
+    private boolean succeed;
+    private String guessedNumber;
+    private String position;
+    private boolean lost;
+    Guess(Player guessing, Player guessed, boolean colorboolean,
+          String number, String position, boolean successboolean, boolean lost) {
         this.playerGuessing = guessing;
         this.playerGuessed = guessed;
-        this.cardGuessed = inputcard;
         this.color = colorboolean;
         this.guessedNumber = number;
         this.position = position;

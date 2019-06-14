@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Player {
+class Player {
     String name = null;
     boolean win;
     boolean lose;

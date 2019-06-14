@@ -1,4 +1,4 @@
-public class Card {
+class Card {
     boolean picked;
     double number;
     int realNumber;
