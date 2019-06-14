@@ -10,10 +10,10 @@ public class Main {
     private static int numberOfPlayer;
     private static boolean started = false;
     private static boolean ended = false;
-    private static Player playerOne = new Player (false, false);
-    private static Player playerTwo = new Player (false, false);
-    private static Player playerThree = new Player (false, false);
-    private static Player playerFour = new Player (false, false);
+    private static Player playerOne = new Player();
+    private static Player playerTwo = new Player();
+    private static Player playerThree = new Player();
+    private static Player playerFour = new Player();
     private static Player[] playerArray = {playerOne, playerTwo, playerThree, playerFour};
     private static Card[][] cardpool;
     private static int cardpoolSize;
@@ -128,20 +128,9 @@ public class Main {
             return;
         }
         System.out.println("Warmest welcome for all of our " + numberOfPlayer + " players");
-        for (int i = 1; i <= numberOfPlayer; i++) {
-            System.out.println("What's the name of #" + i + " player?");
-            String tmpStringForNameInput = scan.next();
-            playerOne.name = playerTwo.name;
-            playerTwo.name = playerThree.name;
-            playerThree.name = playerFour.name;
-            playerFour.name = tmpStringForNameInput;
-        }
-        while (playerOne.name == null) {
-            String tmpStringForNameSwap = playerOne.name;
-            playerOne.name = playerTwo.name;
-            playerTwo.name = playerThree.name;
-            playerThree.name = playerFour.name;
-            playerFour.name = tmpStringForNameSwap;
+        for (int i = 0; i < numberOfPlayer; i++) {
+            System.out.println("What's the name of #" + (i + 1) + " player?");
+            playerArray[i].name = scan.next();
         }
         for (int i = numberOfPlayer; i < 4; i++) {
             playerArray[i].lose = true;
@@ -166,28 +155,8 @@ public class Main {
     }
 
     private static int getAvailableColor() {
-        //TODO 调换 if else 位置
-        if (!pickWhite()) {
-            if (!pickBlack()) {
-                System.out.println("The cardpool is out of card");
-                System.out.println("Please type c and enter to continue");
-                String useless = scan.next();
-                return -1;
-            } else {
-                System.out.println("There's only black card left in the cardpool");
-                System.out.println("Automatically picked black card");
-                System.out.println("Please type c and enter to continue");
-                String useless = scan.next();
-                return 1;
-            }
-        } else {
-            if (!pickBlack()) {
-                System.out.println("There's only white card left in the cardpool");
-                System.out.println("Automatically picked white card");
-                System.out.println("Please type c and enter to continue");
-                String useless = scan.next();
-                return 0;
-            } else {
+        if (pickWhite()) {
+            if (pickBlack()) {
                 System.out.println("0 for white and 1 for black");
                 int color = scan.nextInt();
                 if (color > 1) {
@@ -197,6 +166,25 @@ public class Main {
                     color = 0;
                 }
                 return color;
+            } else {
+                System.out.println("There's only white card left in the cardpool " + "\n"
+                        + "Automatically picked white card" + "\n"
+                        + "Please press enter to continue");
+                new Scanner(System.in).nextLine();
+                return 0;
+            }
+        } else {
+            if (pickBlack()) {
+                System.out.println("There's only black card left in the cardpool " + "\n"
+                        + "Automatically picked black card" + "\n"
+                        + "Please press enter to continue");
+                new Scanner(System.in).nextLine();
+                return 1;
+            } else {
+                System.out.println("The cardpool is out of card" + "\n"
+                        + "Please press enter to continue");
+                new Scanner(System.in).nextLine();
+                return -1;
             }
         }
     }
@@ -210,6 +198,7 @@ public class Main {
         }
         toReturn.picked = true;
         createPositionBeforePick(player, toReturn);
+        // TODO Joker
 //        if (toReturn.realNumber == -1) {
 //            player.needProactiveInsert = true;
 //            changeCardNumber(player, toReturn);
@@ -231,7 +220,7 @@ public class Main {
     }
 
     private static void insertCard(Player player, Card card) {
-        // TODO balabala
+        // TODO Joker
         //在将新的非连字符插入手牌的时候，我们需要考虑以下这几种情况：
         //1、手牌里只有连字符
         //2、手牌里只有连字符和连字符的一边有数字牌
@@ -240,6 +229,7 @@ public class Main {
         System.out.print("Been here!" + "\n");
     }
 
+    // TODO Joker
     private static void changeCardNumber(Player player, Card card) {
         if (player.hand.size() != 0) {
             String leftposition = null;
@@ -255,7 +245,7 @@ public class Main {
                 leftposition = scan.next();
                 System.out.println("Please enter the position of the card that you wish to be the right of the hyphen");
                 rightposition = scan.next();
-                nextto = checkIfNextto(leftposition, rightposition, player);
+                nextto = checkIfNextTo(leftposition, rightposition, player);
             }
             if (leftposition.equals("L")) {
                 leftIndex = -1;
@@ -279,23 +269,24 @@ public class Main {
         }
     }
 
-    private static boolean checkIfNextto(String leftposition, String rightposition, Player player) {
+    // TODO Joker
+    private static boolean checkIfNextTo(String leftPosition, String rightPosition, Player player) {
         boolean leftisposition = false;
         boolean rightisposition = false;
         int leftpositionindex = -100;
         int rightpositionindex = -100;
-        if (leftposition.equals("L")) {
+        if (leftPosition.equals("L")) {
             leftisposition = true;
         }
-        if (rightposition.equals("R")) {
+        if (rightPosition.equals("R")) {
             rightisposition = true;
         }
         for (int i = 0; i < player.hand.size(); i++) {
-            if (leftposition.equals(player.hand.get(i).position)) {
+            if (leftPosition.equals(player.hand.get(i).position)) {
                 leftisposition = true;
                 leftpositionindex = i;
             }
-            if (rightposition.equals(player.hand.get(i).position)) {
+            if (rightPosition.equals(player.hand.get(i).position)) {
                 rightisposition = true;
                 rightpositionindex = i;
             }
@@ -306,15 +297,15 @@ public class Main {
             System.out.print("\n");
             return false;
         }
-        boolean nextto = false;
-        if (leftposition.equals("L") && rightposition.equals(player.hand.get(0).position)) {
-            nextto = true;
-        } else if (rightposition.equals("R") && leftposition.equals(player.hand.get(player.hand.size() - 1).position)) {
-            nextto = true;
+        boolean nextTo = false;
+        if (leftPosition.equals("L") && rightPosition.equals(player.hand.get(0).position)) {
+            nextTo = true;
+        } else if (rightPosition.equals("R") && leftPosition.equals(player.hand.get(player.hand.size() - 1).position)) {
+            nextTo = true;
         } else if (leftpositionindex == rightpositionindex - 1 || leftpositionindex == rightpositionindex + 1) {
-            nextto = true;
+            nextTo = true;
         }
-        if (!nextto) {
+        if (!nextTo) {
             System.out.print("\n");
             System.out.println("The two position you entered are not next to each other");
             System.out.println("In order to put the hyphen in your hand, you need to enter two position that are next to each other");
@@ -460,11 +451,10 @@ public class Main {
                 }
                 System.out.print("\n");
                 for (int k = 0; k < playerArray[i].hand.size(); k++) {
+                    System.out.print(playerArray[i].hand.get(k).position + " ");
                     if (playerArray[i].hand.get(k).realNumber >= 10
                             && playerArray[i].hand.get(k).visible[findPlayerIndex(player)]) {
-                        System.out.print(playerArray[i].hand.get(k).position + "  ");
-                    } else {
-                        System.out.print(playerArray[i].hand.get(k).position + " ");
+                        System.out.print(" ");
                     }
                 }
                 System.out.print("\n");
@@ -563,12 +553,12 @@ public class Main {
         return null;
     }
 
-    private static String guessPosition(Player guessingplayer) {
+    private static String guessPosition(Player guessingPlayer) {
         System.out.println("The position you want to guess is:");
         String position = scan.next();
-        for (int i = 0; i < guessingplayer.hand.size(); i++) {
-            if (position.equals(guessingplayer.hand.get(i).position)) {
-                boolean tmp = testForVisible(guessingplayer.hand.get(i));
+        for (int i = 0; i < guessingPlayer.hand.size(); i++) {
+            if (position.equals(guessingPlayer.hand.get(i).position)) {
+                boolean tmp = testForVisible(guessingPlayer.hand.get(i));
                 if (!tmp) {
                     return position;
                 } else {
@@ -599,14 +589,14 @@ public class Main {
     }
 
     private static int guessNumber() {
-        String[] stringarray = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
+        String[] stringArray = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
         System.out.println("The number you want to guess is:");
-        String numberstring = scan.next();
-        if (numberstring.equals("-")) {
+        String numberString = scan.next();
+        if (numberString.equals("-")) {
             return -1;
         }
         for (int i = 0; i < 12; i++) {
-            if (numberstring.equals(stringarray[i])) {
+            if (numberString.equals(stringArray[i])) {
                 return i;
             }
         }
@@ -684,10 +674,9 @@ public class Main {
         System.out.print("\n");
         for (int k = 0; k < player.hand.size(); k++) {
             boolean tmp = testForVisible(player.hand.get(k));
+            System.out.print(player.hand.get(k).position + " ");
             if (tmp && player.hand.get(k).realNumber >= 10) {
-                System.out.print(player.hand.get(k).position + "  ");
-            } else {
-                System.out.print(player.hand.get(k).position + " ");
+                System.out.print(" ");
             }
         }
         System.out.print("\n");

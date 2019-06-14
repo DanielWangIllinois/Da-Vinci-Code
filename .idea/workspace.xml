@@ -3,12 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="01ab6aac-d16f-4e3d-89bc-7e3eeb054f20" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Da Vinci Code/Card.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Da Vinci Code/Card.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Da Vinci Code/Guess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Da Vinci Code/Guess.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Da Vinci Code/Main$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Da Vinci Code/Main$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Da Vinci Code/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Da Vinci Code/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Da Vinci Code/Player.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Da Vinci Code/Player.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Card.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,14 +30,14 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="217" column="11" selection-start-line="212" selection-start-column="10" selection-end-line="217" selection-end-column="11" />
+            <state relative-caret-position="545">
+              <caret line="185" column="50" selection-start-line="185" selection-start-column="50" selection-end-line="185" selection-end-column="50" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#25424#25425#0" expanded="true" />
                 <element signature="e#25493#25494#0" expanded="true" />
-                <element signature="e#26811#26812#0" expanded="true" />
-                <element signature="e#26900#26901#0" expanded="true" />
+                <element signature="e#26156#26157#0" expanded="true" />
+                <element signature="e#26245#26246#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -49,15 +46,19 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Player.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="28" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
+            <state relative-caret-position="135">
+              <caret line="9" column="45" selection-start-line="9" selection-start-column="45" selection-end-line="9" selection-end-column="45" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Card.java">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="51" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -79,6 +80,14 @@
       <find>eric1392</find>
       <find>guessingcard</find>
       <find>start</find>
+      <find>hyphen</find>
+      <find>(</find>
+      <find>insert</find>
+      <find>inser</find>
+      <find>changecar</find>
+      <find>playerOne</find>
+      <find>playerArray</find>
+      <find>showboard</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -92,8 +101,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/Card.java" />
         <option value="$PROJECT_DIR$/src/Guess.java" />
+        <option value="$PROJECT_DIR$/src/Card.java" />
         <option value="$PROJECT_DIR$/src/Player.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
       </list>
@@ -119,17 +128,6 @@
             <path>
               <item name="Da-Vinci-Code" type="b2602c69:ProjectViewProjectNode" />
               <item name="Da-Vinci-Code" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Da-Vinci-Code" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Da-Vinci-Code" type="462c0819:PsiDirectoryNode" />
-              <item name=".idea" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Da-Vinci-Code" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Da-Vinci-Code" type="462c0819:PsiDirectoryNode" />
-              <item name=".idea" type="462c0819:PsiDirectoryNode" />
-              <item name="dictionaries" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Da-Vinci-Code" type="b2602c69:ProjectViewProjectNode" />
@@ -186,7 +184,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1558507953672</updated>
-      <workItem from="1560504067424" duration="1808000" />
+      <workItem from="1560504067424" duration="3272000" />
     </task>
     <task id="LOCAL-00001" summary="2019.5.22 14:57">
       <created>1558508240154</created>
@@ -300,11 +298,25 @@
       <option name="project" value="LOCAL" />
       <updated>1560505552128</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="优化代码">
+      <created>1560506036536</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1560506036536</updated>
+    </task>
+    <task id="LOCAL-00018" summary="优化代码">
+      <created>1560506138963</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1560506138963</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1808000" />
+    <option name="totallyTimeSpent" value="3272000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -316,7 +328,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="715" extended-state="6" />
+    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.29644588" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -327,11 +340,11 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Run" order="0" visible="true" weight="0.6693419" />
+      <window_info anchor="bottom" id="Run" order="0" weight="0.39486358" />
       <window_info anchor="bottom" id="CheckStyle" order="1" />
       <window_info anchor="bottom" id="Version Control" order="2" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="3" weight="0.32918552" />
-      <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" weight="0.32876712" />
       <window_info anchor="bottom" id="Messages" order="5" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" weight="0.32918552" />
@@ -393,6 +406,16 @@
     <entry file="file://$PROJECT_DIR$/.idea/checkstyle-idea.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/dictionaries/eric.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Card.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="51" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Guess.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
@@ -400,29 +423,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Card.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="28" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
+        <state relative-caret-position="135">
+          <caret line="9" column="45" selection-start-line="9" selection-start-column="45" selection-end-line="9" selection-end-column="45" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/dictionaries/eric.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="217" column="11" selection-start-line="212" selection-start-column="10" selection-end-line="217" selection-end-column="11" />
+        <state relative-caret-position="545">
+          <caret line="185" column="50" selection-start-line="185" selection-start-column="50" selection-end-line="185" selection-end-column="50" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#25424#25425#0" expanded="true" />
             <element signature="e#25493#25494#0" expanded="true" />
-            <element signature="e#26811#26812#0" expanded="true" />
-            <element signature="e#26900#26901#0" expanded="true" />
+            <element signature="e#26156#26157#0" expanded="true" />
+            <element signature="e#26245#26246#0" expanded="true" />
           </folding>
         </state>
       </provider>

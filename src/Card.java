@@ -5,10 +5,10 @@ class Card {
     boolean colorWithWhiteTrueBlackFalse;
     boolean[] visible;
     String position = null;
-    Card(int number, int realNumber, boolean inputcolor, boolean[] v, boolean p) {
+    Card(int number, int realNumber, boolean inputColor, boolean[] v, boolean p) {
         this.number = number;
         this.realNumber = realNumber;
-        this.colorWithWhiteTrueBlackFalse = inputcolor;
+        this.colorWithWhiteTrueBlackFalse = inputColor;
         this.visible = v;
         this.picked = p;
     }

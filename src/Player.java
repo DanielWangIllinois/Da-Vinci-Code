@@ -1,13 +1,11 @@
 import java.util.ArrayList;
 
 class Player {
-    String name = null;
-    boolean win;
-    boolean lose;
+
+    String name = "";
+    boolean win = false;
+    boolean lose = false;
+    // TODO Joker
     boolean needProactiveInsert = false;
     ArrayList<Card> hand = new ArrayList<>();
-    Player (boolean winOrNot, boolean lost) {
-        this.win = winOrNot;
-        this.lose = lost;
-    }
 }
