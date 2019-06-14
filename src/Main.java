@@ -110,7 +110,7 @@ public class Main {
         }
     }
 
-    private static void swap (Card[] inputArray, int i, int j) {
+    private static void swap(Card[] inputArray, int i, int j) {
         Card tmpCard = inputArray[i];
         inputArray[i] = inputArray[j];
         inputArray[j] = tmpCard;
