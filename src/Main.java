@@ -30,14 +30,14 @@ public class Main {
         for (int i = 1; i <= 10; i++) {
             shuffleCardpool(cardpool);
         }
-        while (started == false) {
+        while (!started) {
             start();
         }
         getInitialCard();
-        while (ended == false) {
+        while (!ended) {
             for (int i = 0; i < numberOfPlayer; i++) {
                 turn(playerArray[i]);
-                if (ended == true) {
+                if (ended) {
                     break;
                 }
             }
@@ -63,7 +63,7 @@ public class Main {
         int count = 0;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 13; j++) {
-                if (cardpool[i][j].picked == false) {
+                if (!cardpool[i][j].picked) {
                     count++;
                 }
             }
@@ -74,7 +74,7 @@ public class Main {
     private static int countWhitePoolSize() {
         int count = 0;
         for (int j = 0; j < 13; j++) {
-            if (cardpool[0][j].picked == false) {
+            if (!cardpool[0][j].picked) {
                 count++;
             }
         }
@@ -84,7 +84,7 @@ public class Main {
     private static int countBlackPoolSize() {
         int count = 0;
         for (int j = 0; j < 13; j++) {
-            if (cardpool[1][j].picked == false) {
+            if (!cardpool[1][j].picked) {
                 count++;
             }
         }
@@ -152,7 +152,7 @@ public class Main {
         return true;
     }
 
-    private static boolean getInitialCard() {
+    private static void getInitialCard() {
         System.out.println("\n");
         for (int i = 0; i < numberOfPlayer; i++) {
             System.out.println("\n");
@@ -166,12 +166,12 @@ public class Main {
             }
             showHand(playerArray[i]);
         }
-        return true;
     }
 
     private static int getAvailableColor() {
-        if (pickWhite() == false) {
-            if (pickBlack() == false) {
+        //TODO 调换 if else 位置
+        if (!pickWhite()) {
+            if (!pickBlack()) {
                 System.out.println("The cardpool is out of card");
                 System.out.println("Please type c and enter to continue");
                 String useless = scan.next();
@@ -184,7 +184,7 @@ public class Main {
                 return 1;
             }
         } else {
-            if (pickBlack() == false) {
+            if (!pickBlack()) {
                 System.out.println("There's only white card left in the cardpool");
                 System.out.println("Automatically picked white card");
                 System.out.println("Please type c and enter to continue");
@@ -205,65 +205,52 @@ public class Main {
     }
 
     private static Card pickCardToPlayer(Player player, int color) {
+        Card toReturn;
         if (color <= 0) {
-            Card toreturn = cardpool[0][13 - whiteCardpoolSize];
-            toreturn.picked = true;
-            createPositionBeforePick(player, toreturn);
-            if (toreturn.realNumber == -1) {
-                player.needProactiveInsert = true;
-                changeCardNumber(player, toreturn);
-            } else if (player.needProactiveInsert == true) {
-                insertCard(player, toreturn);
-            }
-            putToHand(player, toreturn);
-            cardpoolSize--;
-            whiteCardpoolSize--;
-            if (checkCardpoolSize() == false) {
-                System.out.println("Bug appeared");
-                return null;
-            }
-            return toreturn;
+            toReturn = cardpool[0][13 - whiteCardpoolSize];
         } else {
-            Card toreturn = cardpool[1][13 - blackCardpoolSize];
-            toreturn.picked = true;
-            createPositionBeforePick(player, toreturn);
-            if (toreturn.realNumber == -1) {
-                player.needProactiveInsert = true;
-                changeCardNumber(player, toreturn);
-            } else if (player.needProactiveInsert == true) {
-                insertCard(player, toreturn);
-            }
-            putToHand(player, toreturn);
-            cardpoolSize--;
-            blackCardpoolSize--;
-            if (checkCardpoolSize() == false) {
-                System.out.println("Bug appeared");
-                return null;
-            }
-            return toreturn;
+            toReturn = cardpool[1][13 - blackCardpoolSize];
         }
+        toReturn.picked = true;
+        createPositionBeforePick(player, toReturn);
+        if (toReturn.realNumber == -1) {
+            player.needProactiveInsert = true;
+            changeCardNumber(player, toReturn);
+        } else if (player.needProactiveInsert) {
+            insertCard(player, toReturn);
+        }
+        putToHand(player, toReturn);
+        cardpoolSize--;
+        if (color <= 0) {
+            whiteCardpoolSize--;
+        } else {
+            blackCardpoolSize--;
+        }
+        if (!checkCardpoolSize()) {
+            System.out.println("Bug appeared");
+            return null;
+        }
+        return toReturn;
     }
 
     private static void insertCard(Player player, Card card) {
+        // TODO balabala
         //在将新的非连字符插入手牌的时候，我们需要考虑以下这几种情况：
         //1、手牌里只有连字符
         //2、手牌里只有连字符和连字符的一边有数字牌
         //3、手牌里连字符的两边都有数字牌
         //之后我们就要判断在放完牌之后连字符的两侧是否有暗着的牌、亮着的牌或根本没有牌
         System.out.print("Been here!" + "\n");
-        return;
     }
 
     private static void changeCardNumber(Player player, Card card) {
-        if (player.hand.size() == 0) {
-            return;
-        } else {
+        if (player.hand.size() != 0) {
             String leftposition = null;
             String rightposition = null;
             double leftindex;
             double rightindex;
             boolean nextto = false;
-            while (nextto == false) {
+            while (!nextto) {
                 showHand(player);
                 System.out.println("Where do you want to put your hyphen?");
                 System.out.println("Note that you could use L for the position left of the smallest card and R for the position right of the biggest card");
@@ -292,7 +279,6 @@ public class Main {
                     }
                 }
             }
-            return;
         }
     }
 
@@ -317,7 +303,7 @@ public class Main {
                 rightpositionindex = i;
             }
         }
-        if (leftisposition == false || rightisposition == false) {
+        if (!leftisposition || !rightisposition) {
             System.out.print("\n");
             System.out.println("The positions you entered are invalid, please try again");
             System.out.print("\n");
@@ -331,7 +317,7 @@ public class Main {
         } else if (leftpositionindex == rightpositionindex - 1 || leftpositionindex == rightpositionindex + 1) {
             nextto = true;
         }
-        if (nextto == false) {
+        if (!nextto) {
             System.out.print("\n");
             System.out.println("The two position you entered are not next to each other");
             System.out.println("In order to put the hyphen in your hand, you need to enter two position that are next to each other");
@@ -349,7 +335,7 @@ public class Main {
         card.position = stringarray[findPlayerIndex(player)] + numberarray[player.hand.size()];
     }
 
-    private static boolean putToHand(Player player, Card card) {
+    private static void putToHand(Player player, Card card) {
         player.hand.add(card);
         Collections.sort(player.hand, new Comparator<Card>(){
             public int compare(Card x, Card y) {
@@ -359,20 +345,19 @@ public class Main {
                 if(x.number < y.number){
                     return -1;
                 }
-                if (x.colorWithWhiteTrueBlackFalse == true) {
+                if (x.colorWithWhiteTrueBlackFalse) {
                     return -1;
                 }
                 return 1;
             }
         });
         card.visible[findPlayerIndex(player)] = true;
-        return true;
     }
 
-    private static boolean showHand(Player player) {
+    private static void showHand(Player player) {
         System.out.println("Your cards are (with position string under them):");
         for (int i = 0; i < player.hand.size(); i++) {
-            if (player.hand.get(i).colorWithWhiteTrueBlackFalse == true) {
+            if (player.hand.get(i).colorWithWhiteTrueBlackFalse) {
                 System.out.print("W");
             } else {
                 System.out.print("B");
@@ -392,16 +377,11 @@ public class Main {
             }
         }
         System.out.println("\n");
-        return true;
     }
 
     private static boolean checkCardpoolSize() {
-        if (getPoolSize() == cardpoolSize) {
-            if (countWhitePoolSize() == whiteCardpoolSize && countBlackPoolSize() == blackCardpoolSize) {
-                return true;
-            }
-        }
-        return false;
+        return getPoolSize() == cardpoolSize && countWhitePoolSize() == whiteCardpoolSize &&
+                countBlackPoolSize() == blackCardpoolSize;
     }
 
     private static int findPlayerIndex(Player player) {
@@ -426,7 +406,7 @@ public class Main {
         showHand(player);
         if (currentcard != null) {
             String color = "B";
-            if (currentcard.colorWithWhiteTrueBlackFalse == true) {
+            if (currentcard.colorWithWhiteTrueBlackFalse) {
                 color = "W";
             }
             if (currentcard.realNumber == -1) {
@@ -439,8 +419,7 @@ public class Main {
         }
         boolean succeed = guess(player);
         if (!succeed) {
-            boolean[] visible = {true, true, true, true};
-            currentcard.visible = visible;
+            currentcard.visible = new boolean[] {true, true, true, true};
         }
         if (ended) {
             return true;
@@ -455,25 +434,24 @@ public class Main {
         System.out.println("Welcome  " + playerArray[findPlayerIndex(player)].name + "  to pick a card");
         int color = getAvailableColor();
         if (color != -1) {
-            Card cardpicked = pickCardToPlayer(player, color);
-            return cardpicked;
+            return pickCardToPlayer(player, color);
         } else {
             return null;
         }
     }
 
-    private static boolean showBoard(Player player) {
+    private static void showBoard(Player player) {
         System.out.print("\n");
         for (int i = 0; i < numberOfPlayer; i++) {
             if (!playerArray[i].equals(player)) {
                 System.out.println(playerArray[i].name + "'s card (with position string under them):");
                 for (int j = 0; j < playerArray[i].hand.size(); j++) {
-                    if (playerArray[i].hand.get(j).colorWithWhiteTrueBlackFalse == true) {
+                    if (playerArray[i].hand.get(j).colorWithWhiteTrueBlackFalse) {
                         System.out.print("W");
                     } else {
                         System.out.print("B");
                     }
-                    if (playerArray[i].hand.get(j).visible[findPlayerIndex(player)] == true) {
+                    if (playerArray[i].hand.get(j).visible[findPlayerIndex(player)]) {
                         if (playerArray[i].hand.get(j).realNumber == -1) {
                             System.out.print("- ");
                         } else {
@@ -486,7 +464,7 @@ public class Main {
                 System.out.print("\n");
                 for (int k = 0; k < playerArray[i].hand.size(); k++) {
                     if (playerArray[i].hand.get(k).realNumber >= 10
-                            && playerArray[i].hand.get(k).visible[findPlayerIndex(player)] == true) {
+                            && playerArray[i].hand.get(k).visible[findPlayerIndex(player)]) {
                         System.out.print(playerArray[i].hand.get(k).position + "  ");
                     } else {
                         System.out.print(playerArray[i].hand.get(k).position + " ");
@@ -495,7 +473,6 @@ public class Main {
                 System.out.print("\n");
             }
         }
-        return true;
     }
 
     private static boolean guess(Player player) {
@@ -641,16 +618,17 @@ public class Main {
     }
 
     private static boolean testForGuess(Card card, int number, int color) {
-        boolean colorboolean = false;
-        if (color <= 0) {
-            colorboolean = true;
-        }
-        if (card.realNumber == number) {
-            if (card.colorWithWhiteTrueBlackFalse == colorboolean) {
-                return true;
-            }
-        }
-        return false;
+//        boolean colorboolean = false;
+//        if (color <= 0) {
+//            colorboolean = true;
+//        }
+//        if (card.realNumber == number) {
+//            if (card.colorWithWhiteTrueBlackFalse == colorboolean) {
+//                return true;
+//            }
+//        }
+//        return false;
+        return card.realNumber == number && card.colorWithWhiteTrueBlackFalse == (color <= 0);
     }
 
     private static boolean testIfWin(Player player) {
@@ -683,13 +661,11 @@ public class Main {
         System.out.println("\n");
     }
 
-    private static boolean rightGuess(Card card) {
-        boolean[] visible = {true, true, true, true};
-        card.visible = visible;
-        return true;
+    private static void rightGuess(Card card) {
+        card.visible = new boolean[] {true, true, true, true};
     }
 
-    private static boolean showHandFromOtherPlayer(Player player) {
+    private static void showHandFromOtherPlayer(Player player) {
         System.out.println("Your cards in other player's view are (with position string under them):");
         for (int i = 0; i < player.hand.size(); i++) {
             if (player.hand.get(i).colorWithWhiteTrueBlackFalse) {
@@ -718,7 +694,6 @@ public class Main {
             }
         }
         System.out.print("\n");
-        return true;
     }
 
     private static Card findCardByPosition(String position) {
