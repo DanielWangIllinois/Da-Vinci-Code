@@ -8,13 +8,13 @@ public class Main {
     private static Scanner scan = new Scanner(System.in);
     private static Random rand = new Random();
     private static int numberOfPlayer;
-    private static boolean started = false;
     private static boolean ended = false;
     private static Player[] playerArray = {new Player(), new Player(), new Player(), new Player()};
     private static Card[][] cardpool;
     private static int cardpoolSize;
     private static int whiteCardpoolSize;
     private static int blackCardpoolSize;
+    // private static int[] newCPS;
     private static int numberOfTurn = 1;
     private static ArrayList<Guess> history = new ArrayList<>();
 
@@ -23,12 +23,8 @@ public class Main {
         cardpoolSize = getPoolSize();
         whiteCardpoolSize = countPoolSize(true);
         blackCardpoolSize = countPoolSize(false);
-        for (int i = 1; i <= 10; i++) {
-            shuffleCardpool(cardpool);
-        }
-        while (!started) {
-            start();
-        }
+        shuffleCardpool(cardpool, rand.nextInt(50) + 50, rand.nextInt(50) + 50);
+        start();
         getInitialCard();
         while (!ended) {
             for (int i = 0; i < numberOfPlayer; i++) {
@@ -40,6 +36,10 @@ public class Main {
         }
     }
 
+    /**
+     * create a new array of ordered card (B&W from -1 to 11)
+     * @return Card[][] object
+     */
     private static Card[][] newCardpool() {
         Card[][] cardpoolToReturn = new Card[2][13];
         for (int j = 0; j < 2; j++) {
@@ -81,22 +81,13 @@ public class Main {
         return count;
     }
 
-    private static void shuffleCardpool(Card[][] input) {
-        Card[] whiteCard = new Card[13];
-        Card[] blackCard = new Card[13];
-        for (int i = 0; i < 13; i++) {
-            whiteCard[i] = input[0][i];
-            blackCard[i] = input[1][i];
-        }
-        for (int i = 13; i > 0; i--) {
-            swap(whiteCard, rand.nextInt(i), i - 1);
-        }
-        for (int i = 13; i > 0; i--) {
-            swap(blackCard, rand.nextInt(i), i - 1);
-        }
-        for (int i = 0; i < 13; i++) {
-            input[0][i] = whiteCard[i];
-            input[1][i] = blackCard[i];
+    private static void shuffleCardpool(Card[][] input, int whiteShuffleCount, int blackShuffleCount) {
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < (i == 0?whiteShuffleCount:blackShuffleCount); j++) {
+                for (int k = 12; k >= 0; k--) {
+                    swap(input[i], rand.nextInt(k + 1), k);
+                }
+            }
         }
     }
 
@@ -107,13 +98,17 @@ public class Main {
     }
 
     private static void start() {
+        boolean correct = false;
         System.out.println("Welcome to The Da Vinci Code" + "\n");
-        System.out.println("How many people is playing this game?");
-        numberOfPlayer = scan.nextInt();
-        if (numberOfPlayer >= 5 || numberOfPlayer <= 0) {
-            System.out.println("Sorry, this game could not have " + (numberOfPlayer >= 5?"more than 4":"less than 1")
-                    + " players" + "\n");
-            return;
+        while (!correct) {
+            System.out.println("How many people is playing this game?");
+            numberOfPlayer = scan.nextInt();
+            if (numberOfPlayer >= 5 || numberOfPlayer <= 0) {
+                System.out.println("Sorry, this game could not have " + (numberOfPlayer >= 5 ? "more than 4" : "less than 1")
+                        + " players" + "\n");
+            } else {
+                correct = true;
+            }
         }
         System.out.println("Warmest welcome for all of our " + numberOfPlayer + " players");
         for (int i = 0; i < numberOfPlayer; i++) {
@@ -123,7 +118,6 @@ public class Main {
         for (int i = numberOfPlayer; i < 4; i++) {
             playerArray[i].lose = true;
         }
-        started = true;
     }
 
     private static void getInitialCard() {
