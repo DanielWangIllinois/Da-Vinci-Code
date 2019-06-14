@@ -415,7 +415,7 @@ public class Main {
     }
 
     private static boolean turn(Player player) {
-        if (player.lose == true) {
+        if (player.lose) {
             return false;
         }
         System.out.println("\n");
@@ -438,11 +438,11 @@ public class Main {
             System.out.print("\n");
         }
         boolean succeed = guess(player);
-        if (succeed == false) {
+        if (!succeed) {
             boolean[] visible = {true, true, true, true};
             currentcard.visible = visible;
         }
-        if (ended == true) {
+        if (ended) {
             return true;
         }
         System.out.println("This is the end of #" + numberOfTurn + " turn");
@@ -465,9 +465,7 @@ public class Main {
     private static boolean showBoard(Player player) {
         System.out.print("\n");
         for (int i = 0; i < numberOfPlayer; i++) {
-            if (playerArray[i].equals(player)) {
-                continue;
-            } else {
+            if (!playerArray[i].equals(player)) {
                 System.out.println(playerArray[i].name + "'s card (with position string under them):");
                 for (int j = 0; j < playerArray[i].hand.size(); j++) {
                     if (playerArray[i].hand.get(j).colorWithWhiteTrueBlackFalse == true) {
@@ -534,21 +532,21 @@ public class Main {
         currentguess.createGuessOutput(numberOfTurn);
         history.add(currentguess);
         playerguessed.needProactiveInsert = testForInsertion(playerguessed);
-        if (guessboolean == true) {
+        if (guessboolean) {
             rightGuess(guessingcard);
             System.out.println("Congratulations, this is a correct guess!");
             System.out.println("The new board is:");
             showBoard(player);
             showHandFromOtherPlayer(player);
             showHand(player);
-            if (testIfLose(playerguessed) == true) {
+            if (testIfLose(playerguessed)) {
                 Guess lost = new Guess(playerguessed, null,
                         false, null,null, false, true);
                 lost.createGuessOutput(-1);
                 history.add(lost);
                 playerguessed.lose = true;
             }
-            if (testIfWin(player) == true) {
+            if (testIfWin(player)) {
                 changeWinner(player);
                 System.out.println("\n");
                 System.out.println("This game is ended.");
@@ -597,7 +595,7 @@ public class Main {
         for (int i = 0; i < guessingplayer.hand.size(); i++) {
             if (position.equals(guessingplayer.hand.get(i).position)) {
                 boolean tmp = testForVisible(guessingplayer.hand.get(i));
-                if (tmp == false) {
+                if (!tmp) {
                     return position;
                 } else {
                     System.out.println("The card correspond to the position you entered has already been guessed correctly, please try again");
@@ -657,11 +655,9 @@ public class Main {
 
     private static boolean testIfWin(Player player) {
         for (int i = 0; i < numberOfPlayer; i++) {
-            if (player.equals(playerArray[i])) {
-                continue;
-            } else {
+            if (!player.equals(playerArray[i])) {
                 for (int j = 0; j < playerArray[i].hand.size(); j++) {
-                    if (testForVisible(playerArray[i].hand.get(j)) == false) {
+                    if (!testForVisible(playerArray[i].hand.get(j))) {
                         return false;
                     }
                 }
@@ -672,7 +668,7 @@ public class Main {
 
     private static boolean testIfLose(Player player) {
         for (int i = 0; i < player.hand.size(); i++) {
-            if (testForVisible(player.hand.get(i)) == false) {
+            if (!testForVisible(player.hand.get(i))) {
                 return false;
             }
         }
@@ -685,7 +681,6 @@ public class Main {
             System.out.println(history.get(i).output);
         }
         System.out.println("\n");
-        return;
     }
 
     private static boolean rightGuess(Card card) {
@@ -697,13 +692,13 @@ public class Main {
     private static boolean showHandFromOtherPlayer(Player player) {
         System.out.println("Your cards in other player's view are (with position string under them):");
         for (int i = 0; i < player.hand.size(); i++) {
-            if (player.hand.get(i).colorWithWhiteTrueBlackFalse == true) {
+            if (player.hand.get(i).colorWithWhiteTrueBlackFalse) {
                 System.out.print("W");
             } else {
                 System.out.print("B");
             }
             boolean tmp = testForVisible(player.hand.get(i));
-            if (tmp == true) {
+            if (tmp) {
                 if (player.hand.get(i).realNumber == -1) {
                     System.out.print("- ");
                 } else {
@@ -716,7 +711,7 @@ public class Main {
         System.out.print("\n");
         for (int k = 0; k < player.hand.size(); k++) {
             boolean tmp = testForVisible(player.hand.get(k));
-            if (tmp == true && player.hand.get(k).realNumber >= 10) {
+            if (tmp && player.hand.get(k).realNumber >= 10) {
                 System.out.print(player.hand.get(k).position + "  ");
             } else {
                 System.out.print(player.hand.get(k).position + " ");
@@ -738,17 +733,11 @@ public class Main {
     }
 
     private static boolean pickWhite() {
-        if (countWhitePoolSize() <= 0) {
-            return false;
-        }
-        return true;
+        return countWhitePoolSize() > 0;
     }
 
     private static boolean pickBlack() {
-        if (countBlackPoolSize() <= 0) {
-            return false;
-        }
-        return true;
+        return countBlackPoolSize() > 0;
     }
 
     private static void changeWinner(Player player) {
@@ -758,7 +747,7 @@ public class Main {
 
     private static boolean testForVisible(Card card) {
         for (int i  = 0; i < 4; i++) {
-            if (card.visible[i] == false) {
+            if (!card.visible[i]) {
                 return false;
             }
         }
@@ -766,11 +755,11 @@ public class Main {
     }
 
     private static boolean testForInsertion(Player player) {
-        if (player.needProactiveInsert == false) {
+        if (!player.needProactiveInsert) {
             return false;
         } else {
             for (int i = 0; i < player.hand.size(); i++) {
-                if (player.hand.get(i).realNumber == -1 && testForVisible(player.hand.get(i)) == false) {
+                if (player.hand.get(i).realNumber == -1 && !testForVisible(player.hand.get(i))) {
                     return true;
                 }
             }
