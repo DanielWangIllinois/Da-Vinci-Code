@@ -17,13 +17,13 @@ class Guess {
         this.succeed = successboolean;
         this.lost = lost;
     }
-    public void createGuessOutput(int turn) {
+    void createGuessOutput(int turn) {
         String color = "B";
-        if (this.color == true) {
+        if (this.color) {
             color = "W";
         }
-        if (lost == false) {
-            if (succeed == true) {
+        if (!lost) {
+            if (succeed) {
                 this.output = this.playerGuessing.name + " guessed " + this.playerGuessed.name + "'s card at "
                         + this.position + " position to be " + color + this.guessedNumber + " in turn #" + turn + " and succeed";
             } else {

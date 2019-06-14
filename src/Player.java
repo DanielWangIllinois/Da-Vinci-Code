@@ -6,8 +6,8 @@ class Player {
     boolean lose;
     boolean needProactiveInsert = false;
     ArrayList<Card> hand = new ArrayList<>();
-    Player (boolean winornot, boolean lost) {
-        this.win = winornot;
+    Player (boolean winOrNot, boolean lost) {
+        this.win = winOrNot;
         this.lose = lost;
     }
 }
