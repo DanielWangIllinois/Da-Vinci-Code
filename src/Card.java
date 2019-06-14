@@ -1,14 +1,14 @@
 public class Card {
     boolean picked;
     double number;
-    int realnumber;
-    boolean colorwithwhitetrueblackfalse;
+    int realNumber;
+    boolean colorWithWhiteTrueBlackFalse;
     boolean[] visible;
     String position = null;
-    Card(int number, int realnumber, boolean inputcolor, boolean[] v, boolean p) {
+    Card(int number, int realNumber, boolean inputcolor, boolean[] v, boolean p) {
         this.number = number;
-        this.realnumber = realnumber;
-        this.colorwithwhitetrueblackfalse = inputcolor;
+        this.realNumber = realNumber;
+        this.colorWithWhiteTrueBlackFalse = inputcolor;
         this.visible = v;
         this.picked = p;
     }
