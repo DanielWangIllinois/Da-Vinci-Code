@@ -210,12 +210,12 @@ public class Main {
         }
         toReturn.picked = true;
         createPositionBeforePick(player, toReturn);
-        if (toReturn.realNumber == -1) {
-            player.needProactiveInsert = true;
-            changeCardNumber(player, toReturn);
-        } else if (player.needProactiveInsert) {
-            insertCard(player, toReturn);
-        }
+//        if (toReturn.realNumber == -1) {
+//            player.needProactiveInsert = true;
+//            changeCardNumber(player, toReturn);
+//        } else if (player.needProactiveInsert) {
+//            insertCard(player, toReturn);
+//        }
         putToHand(player, toReturn);
         cardpoolSize--;
         if (color <= 0) {
@@ -487,27 +487,27 @@ public class Main {
         while (color == -1) {
             color = guessColor();
         }
-        boolean colorboolean = false;
+        boolean colorBoolean = false;
         if (color <= 0) {
-            colorboolean = true;
+            colorBoolean = true;
         }
         int number = guessNumber();
         while (number == -100) {
             number = guessNumber();
         }
-        Card guessingcard = findCardByPosition(position);
-        boolean guessboolean = testForGuess(guessingcard, number, color);
+        Card guessingCard = findCardByPosition(position);
+        boolean guessBoolean = testForGuess(guessingCard, number, color);
         String numberstring = Integer.toString(number);
         if (numberstring.equals("-1")) {
             numberstring = "-";
         }
         Guess currentguess =  new Guess(player, playerguessed,
-                colorboolean, numberstring, position, guessboolean, false);
+                colorBoolean, numberstring, position, guessBoolean, false);
         currentguess.createGuessOutput(numberOfTurn);
         history.add(currentguess);
         playerguessed.needProactiveInsert = testForInsertion(playerguessed);
-        if (guessboolean) {
-            rightGuess(guessingcard);
+        if (guessBoolean) {
+            rightGuess(guessingCard);
             System.out.println("Congratulations, this is a correct guess!");
             System.out.println("The new board is:");
             showBoard(player);
@@ -615,12 +615,12 @@ public class Main {
     }
 
     private static boolean testForGuess(Card card, int number, int color) {
-//        boolean colorboolean = false;
+//        boolean colorBoolean = false;
 //        if (color <= 0) {
-//            colorboolean = true;
+//            colorBoolean = true;
 //        }
 //        if (card.realNumber == number) {
-//            if (card.colorWithWhiteTrueBlackFalse == colorboolean) {
+//            if (card.colorWithWhiteTrueBlackFalse == colorBoolean) {
 //                return true;
 //            }
 //        }
