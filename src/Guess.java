@@ -7,31 +7,25 @@ class Guess {
     private String guessedNumber;
     private String position;
     private boolean lost;
-    Guess(Player guessing, Player guessed, boolean colorboolean,
-          String number, String position, boolean successboolean, boolean lost) {
+    Guess(Player guessing, Player guessed, boolean colorBoolean,
+          String number, String position, boolean successBoolean, boolean lost) {
         this.playerGuessing = guessing;
         this.playerGuessed = guessed;
-        this.color = colorboolean;
+        this.color = colorBoolean;
         this.guessedNumber = number;
         this.position = position;
-        this.succeed = successboolean;
+        this.succeed = successBoolean;
         this.lost = lost;
     }
     void createGuessOutput(int turn) {
-        String color = "B";
-        if (this.color) {
-            color = "W";
-        }
-        if (!lost) {
-            if (succeed) {
-                this.output = this.playerGuessing.name + " guessed " + this.playerGuessed.name + "'s card at "
-                        + this.position + " position to be " + color + this.guessedNumber + " in turn #" + turn + " and succeed";
-            } else {
-                this.output = this.playerGuessing.name + " guessed " + this.playerGuessed.name + "'s card at "
-                        + this.position + " position to be " + color + this.guessedNumber + " in turn #" + turn + " but failed";
-            }
-        } else {
+        // if this.color == true, then color = "W"
+        String color = this.color?"W":"B";
+        if (lost) {
             this.output = playerGuessing.name + "  is lost";
+        } else {
+            this.output = this.playerGuessing.name + " guessed " + this.playerGuessed.name + "'s card at "
+                    + this.position + " position to be " + color + this.guessedNumber + " in turn #" + turn
+                    + " " + (succeed?"and succeed":"but failed");
         }
     }
 }

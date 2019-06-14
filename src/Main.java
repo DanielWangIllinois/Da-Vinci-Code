@@ -10,11 +10,7 @@ public class Main {
     private static int numberOfPlayer;
     private static boolean started = false;
     private static boolean ended = false;
-    private static Player playerOne = new Player();
-    private static Player playerTwo = new Player();
-    private static Player playerThree = new Player();
-    private static Player playerFour = new Player();
-    private static Player[] playerArray = {playerOne, playerTwo, playerThree, playerFour};
+    private static Player[] playerArray = {new Player(), new Player(), new Player(), new Player()};
     private static Card[][] cardpool;
     private static int cardpoolSize;
     private static int whiteCardpoolSize;
@@ -25,8 +21,8 @@ public class Main {
     public static void main(String [] args) {
         cardpool = newCardpool();
         cardpoolSize = getPoolSize();
-        whiteCardpoolSize = countWhitePoolSize();
-        blackCardpoolSize = countBlackPoolSize();
+        whiteCardpoolSize = countPoolSize(true);
+        blackCardpoolSize = countPoolSize(false);
         for (int i = 1; i <= 10; i++) {
             shuffleCardpool(cardpool);
         }
@@ -46,15 +42,12 @@ public class Main {
 
     private static Card[][] newCardpool() {
         Card[][] cardpoolToReturn = new Card[2][13];
-        for (int i = -1; i < 12; i++) {
-            boolean[] visible = {false, false, false,false};
-            Card card = new Card(i, i,true,visible,false);
-            cardpoolToReturn[0][i + 1] = card;
-        }
-        for (int i = -1; i < 12; i++) {
-            boolean[] visible = {false, false, false,false};
-            Card card = new Card(i, i,false,visible,false);
-            cardpoolToReturn[1][i + 1] = card;
+        for (int j = 0; j < 2; j++) {
+            for (int i = -1; i < 12; i++) {
+                boolean[] visible = {false, false, false, false};
+                Card card = new Card(i, i, j == 0, visible, false);
+                cardpoolToReturn[j][i + 1] = card;
+            }
         }
         return cardpoolToReturn;
     }
@@ -71,20 +64,17 @@ public class Main {
         return count;
     }
 
-    private static int countWhitePoolSize() {
+    /**
+     * count the size of the card pool
+     * @param white if true, count white pool
+     *              if false, count black pool
+     * @return pool size
+     */
+    private static int countPoolSize(boolean white) {
         int count = 0;
+        int x = white?0:1;
         for (int j = 0; j < 13; j++) {
-            if (!cardpool[0][j].picked) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    private static int countBlackPoolSize() {
-        int count = 0;
-        for (int j = 0; j < 13; j++) {
-            if (!cardpool[1][j].picked) {
+            if (!cardpool[x][j].picked) {
                 count++;
             }
         }
@@ -120,11 +110,9 @@ public class Main {
         System.out.println("Welcome to The Da Vinci Code" + "\n");
         System.out.println("How many people is playing this game?");
         numberOfPlayer = scan.nextInt();
-        if (numberOfPlayer >= 5) {
-            System.out.println("Sorry, this game could not have more than 4 players" + "\n");
-            return;
-        } else if (numberOfPlayer <= 0) {
-            System.out.println("Sorry, this game could not have less than 1 player" + "\n");
+        if (numberOfPlayer >= 5 || numberOfPlayer <= 0) {
+            System.out.println("Sorry, this game could not have " + (numberOfPlayer >= 5?"more than 4":"less than 1")
+                    + " players" + "\n");
             return;
         }
         System.out.println("Warmest welcome for all of our " + numberOfPlayer + " players");
@@ -368,8 +356,8 @@ public class Main {
     }
 
     private static boolean checkCardpoolSize() {
-        return getPoolSize() == cardpoolSize && countWhitePoolSize() == whiteCardpoolSize &&
-                countBlackPoolSize() == blackCardpoolSize;
+        return getPoolSize() == cardpoolSize && countPoolSize(true) == whiteCardpoolSize &&
+                countPoolSize(false) == blackCardpoolSize;
     }
 
     private static int findPlayerIndex(Player player) {
@@ -511,7 +499,7 @@ public class Main {
                 playerguessed.lose = true;
             }
             if (testIfWin(player)) {
-                changeWinner(player);
+                assignWinner(player);
                 System.out.println("\n");
                 System.out.println("This game is ended.");
                 System.out.println("The winner is  " + player.name + "  !");
@@ -605,16 +593,6 @@ public class Main {
     }
 
     private static boolean testForGuess(Card card, int number, int color) {
-//        boolean colorBoolean = false;
-//        if (color <= 0) {
-//            colorBoolean = true;
-//        }
-//        if (card.realNumber == number) {
-//            if (card.colorWithWhiteTrueBlackFalse == colorBoolean) {
-//                return true;
-//            }
-//        }
-//        return false;
         return card.realNumber == number && card.colorWithWhiteTrueBlackFalse == (color <= 0);
     }
 
@@ -694,14 +672,18 @@ public class Main {
     }
 
     private static boolean pickWhite() {
-        return countWhitePoolSize() > 0;
+        return countPoolSize(true) > 0;
     }
 
     private static boolean pickBlack() {
-        return countBlackPoolSize() > 0;
+        return countPoolSize(false) > 0;
     }
 
-    private static void changeWinner(Player player) {
+    /**
+     * assign the winner and end the game
+     * @param player the winner
+     */
+    private static void assignWinner(Player player) {
         player.win = true;
         ended = true;
     }

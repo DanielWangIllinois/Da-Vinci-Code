@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 class Player {
 
-    String name = "";
+    String name = "N/A";
     boolean win = false;
     boolean lose = false;
     // TODO Joker
