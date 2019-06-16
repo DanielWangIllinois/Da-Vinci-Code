@@ -11,18 +11,16 @@ public class Main {
     private static boolean ended = false;
     private static Player[] playerArray = {new Player(), new Player(), new Player(), new Player()};
     private static Card[][] cardpool;
-    private static int cardpoolSize;
-    private static int whiteCardpoolSize;
-    private static int blackCardpoolSize;
-    // private static int[] newCPS;
+    /**
+     * [white pool size][black pool size]
+     */
+    private static int[] cardpoolSize;
     private static int numberOfTurn = 1;
     private static ArrayList<Guess> history = new ArrayList<>();
 
     public static void main(String [] args) {
         cardpool = newCardpool();
         cardpoolSize = getPoolSize();
-        whiteCardpoolSize = countPoolSize(true);
-        blackCardpoolSize = countPoolSize(false);
         shuffleCardpool(cardpool, rand.nextInt(50) + 50, rand.nextInt(50) + 50);
         start();
         getInitialCard();
@@ -52,12 +50,12 @@ public class Main {
         return cardpoolToReturn;
     }
 
-    private static int getPoolSize() {
-        int count = 0;
+    private static int[] getPoolSize() {
+        int[] count = {0, 0};
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 13; j++) {
                 if (!cardpool[i][j].picked) {
-                    count++;
+                    count[i]++;
                 }
             }
         }
@@ -174,9 +172,9 @@ public class Main {
     private static Card pickCardToPlayer(Player player, int color) {
         Card toReturn;
         if (color <= 0) {
-            toReturn = cardpool[0][13 - whiteCardpoolSize];
+            toReturn = cardpool[0][13 - cardpoolSize[0]];
         } else {
-            toReturn = cardpool[1][13 - blackCardpoolSize];
+            toReturn = cardpool[1][13 - cardpoolSize[1]];
         }
         toReturn.picked = true;
         createPositionBeforePick(player, toReturn);
@@ -188,11 +186,10 @@ public class Main {
 //            insertCard(player, toReturn);
 //        }
         putToHand(player, toReturn);
-        cardpoolSize--;
         if (color <= 0) {
-            whiteCardpoolSize--;
+            cardpoolSize[0]--;
         } else {
-            blackCardpoolSize--;
+            cardpoolSize[1]--;
         }
         if (!checkCardpoolSize()) {
             System.out.println("Bug appeared");
@@ -350,8 +347,8 @@ public class Main {
     }
 
     private static boolean checkCardpoolSize() {
-        return getPoolSize() == cardpoolSize && countPoolSize(true) == whiteCardpoolSize &&
-                countPoolSize(false) == blackCardpoolSize;
+        return getPoolSize() == cardpoolSize && countPoolSize(true) == cardpoolSize[0] &&
+                countPoolSize(false) == cardpoolSize[1];
     }
 
     private static int findPlayerIndex(Player player) {
